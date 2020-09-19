@@ -14,6 +14,17 @@ public class Word {
         this.word_explain = explain;
     }
 
+    // create new word that has the same properties with another word w.
+    public Word(Word w) {
+        this.word_target = w.word_target;
+        this.word_explain = w.word_explain;
+    }
+
+    public void copyWord(Word w) {
+        this.word_target = w.word_target;
+        this.word_explain = w.word_explain;
+    }
+
     public void setWord_target(String word_target) {
         this.word_target = word_target;
     }
