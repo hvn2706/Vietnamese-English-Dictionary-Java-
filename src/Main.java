@@ -9,9 +9,7 @@ public class Main {
      * @param args do nothing.
      */
     public static void main(String[] args) {
-        DictionaryManagement mn = new DictionaryManagement();
         DictionaryCommandline cmd = new DictionaryCommandline();
-        mn.insertFromCommandline();
-        cmd.showAllWords(mn.getDict());
+        cmd.dictionaryBasic();
     }
 }
