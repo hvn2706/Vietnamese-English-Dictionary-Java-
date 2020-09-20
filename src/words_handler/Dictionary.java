@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class Dictionary {
     private ArrayList<Word> words = new ArrayList<>();
 
+    public int getLength() {
+        return words.size();
+    }
+
     public void addWord(Word w) {
         words.add(w);
     }
