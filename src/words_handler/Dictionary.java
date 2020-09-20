@@ -1,23 +1,23 @@
 package words_handler;
 
+import java.util.ArrayList;
+
 public class Dictionary {
-    private Word[] words = new Word[1000];
-    private int len = 0;
+    private ArrayList<Word> words = new ArrayList<>();
 
     public void addWord(Word w) {
-        words[len] = new Word(w);
-        len++;
+        words.add(w);
     }
     
     public Word getWord(int index) {
-        return words[index];
+        return words.get(index);
     }
 
     public void setWord(int index, Word w) {
-        words[index].copyWord(w);
+        words.set(index, w);
     }
 
-    public void removeWord(String target) {
-
+    public void removeWord(Word w) {
+        words.remove(w);
     }
 }
