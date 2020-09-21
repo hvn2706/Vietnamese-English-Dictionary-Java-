@@ -32,7 +32,7 @@ public class DictionaryCommandline {
         }
     }
 
-    public void dictionaryBasic() {
+    public void dictionaryAdvance() {
         DictionaryManagement mn = new DictionaryManagement();
         mn.insertFromFile();
         this.showAllWords(mn.getDict());
