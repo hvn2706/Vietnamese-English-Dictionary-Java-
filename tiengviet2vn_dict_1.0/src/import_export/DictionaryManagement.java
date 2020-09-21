@@ -50,7 +50,7 @@ public class DictionaryManagement {
             String s = sc.nextLine();
             for (int i = 0; i < dict.getLength(); ++i) {
                 Word tmp = dict.getWord(i);
-                if (tmp.getWord_target().toLowerCase().contains(s.toLowerCase()) == true) {
+                if (tmp.getWord_target().toLowerCase().contains(s.toLowerCase())) {
                     System.out.println(tmp.getWord_target() + " " + tmp.getWord_explain());
                 }
             }
