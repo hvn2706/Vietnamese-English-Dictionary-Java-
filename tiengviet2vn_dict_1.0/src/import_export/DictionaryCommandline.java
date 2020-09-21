@@ -36,5 +36,6 @@ public class DictionaryCommandline {
         DictionaryManagement mn = new DictionaryManagement();
         mn.insertFromFile();
         this.showAllWords(mn.getDict());
+        mn.dictionaryLookup();
     }
 }
