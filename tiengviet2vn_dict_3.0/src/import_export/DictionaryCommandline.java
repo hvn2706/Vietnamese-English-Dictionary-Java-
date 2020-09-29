@@ -1,5 +1,7 @@
 package import_export;
 
+import java.util.*; 
+
 import words_handler.Dictionary;
 import words_handler.Word;
 
@@ -34,15 +36,15 @@ public class DictionaryCommandline {
     }
 
     public String[] dictionarySearcher(String s, Dictionary dict) {
-        String[] rt = new String[1000];
-        int len = 0;
+        ArrayList<String> l = new ArrayList<String>();
         for (int i = 0; i < dict.getLength(); ++i) {
             Word tmp = dict.getWord(i);
             if (tmp.getWord_target().toLowerCase().contains(s.toLowerCase())) {
-                rt[len] = tmp.getWord_explain();
-                len++;
+                l.add(tmp.getWord_target());
             }
         }
+        String[] rt = new String[l.size()];
+        rt = l.toArray(rt);
         return rt;
     }
 
@@ -58,15 +60,15 @@ public class DictionaryCommandline {
     }
 
     public String[] dictionarySearchSamePrefix(String s, Dictionary dict) {
-        String[] rt = new String[1000];
-        int len = 0;
-        for (int i = 0; i < dict.getLength() && len < 1000; ++i) {
+        ArrayList<String> l = new ArrayList<String>();
+        for (int i = 0; i < dict.getLength(); ++i) {
             Word tmp = dict.getWord(i);
             if (tmp.getWord_target().toLowerCase().startsWith(s.toLowerCase())) {
-                rt[len] = tmp.getWord_target();
-                len++;
+                l.add(tmp.getWord_target());
             }
         }
+        String[] rt = new String[l.size()];
+        rt = l.toArray(rt);
         return rt;
     }
 

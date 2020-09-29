@@ -7,6 +7,10 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 
+import java.io.*; 
+import java.util.List;
+import java.util.ArrayList; 
+
 import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
 
@@ -18,12 +22,17 @@ public class DictionaryApplication {
 		JPanel defPanel = new JPanel();
 		JPanel schPanel = new JPanel();
 		JPanel sbrPanel = new JPanel();
+		JPanel sgnPanel = new JPanel();
 		GridBagConstraints c = new GridBagConstraints();
 		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		Border blackline = BorderFactory.createLineBorder(Color.black);
 
 		JTextArea schwd = new JTextArea("Word here");
-		JTextArea sgn = new JTextArea("Suggestions here");
 		JTextArea def = new JTextArea("Vu Hien xau trai!!!");
+		JList<String> sgn = new JList<String>();
+		JScrollPane sgn_scroll = new JScrollPane(sgn);
+
+		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		schwd.setBorder(loweredbevel);
 		sgn.setBorder(loweredbevel);
@@ -35,27 +44,28 @@ public class DictionaryApplication {
 			}
 			public void insertUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
-				String txt = "";
 				if(schwd.getText().isEmpty()) {
-					sgn_list[0]=null;
+					sgn_list = new String[0];
 				}
-				for(int i=0; sgn_list[i]!=null; i++) {
-					txt += (sgn_list[i] + "\n");
-				}
-				sgn.setText(txt);
+				sgn.setListData(sgn_list);
 				def.setText(cmd.dictionarySearchExact(schwd.getText(), mn.getDict()));
 			}
 			public void removeUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
-				String txt = "";
 				if(schwd.getText().isEmpty()) {
-					sgn_list[0]=null;
+					sgn_list = new String[0];
 				}
-				for(int i=0; sgn_list[i]!=null; i++) {
-					txt += (sgn_list[i] + "\n");
-				}
-				sgn.setText(txt);
+				sgn.setListData(sgn_list);
 				def.setText(cmd.dictionarySearchExact(schwd.getText(), mn.getDict()));
+			}
+		});
+
+		sgn.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(e.getValueIsAdjusting()) {
+					return;
+				}
+				def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 			}
 		});
 
@@ -65,6 +75,7 @@ public class DictionaryApplication {
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
 		sbrPanel.setLayout(new GridBagLayout());
+		sgnPanel.setLayout(new GridBagLayout());
 
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(2, 2, 2, 2);
@@ -97,7 +108,19 @@ public class DictionaryApplication {
 		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 1;
-		schPanel.add(sgn, c);
+		schPanel.add(sgnPanel, c);
+
+		// c.weightx = 1;
+		// c.weighty = 1;
+		// c.gridx = 0;
+		// c.gridy = 0;
+		// sgnPanel.add(sgn, c);
+
+		c.weightx = 1;
+		c.weighty = 1;
+		c.gridx = 1;
+		c.gridy = 1;
+		sgnPanel.add(sgn_scroll, c);
 
 		f.setBounds(650, 200, 400, 200);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
