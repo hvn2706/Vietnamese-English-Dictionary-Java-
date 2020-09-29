@@ -34,7 +34,7 @@ public class DictionaryManagement {
             Scanner sc_ = new Scanner(input_);
 
             while (sc.hasNext() && sc_.hasNextLine()) {
-                String target = sc.next();
+                String target = sc.nextLine();
                 String explain = sc_.nextLine();
                 Word word = new Word(target, explain);
                 dict.addWord(word);
