@@ -100,6 +100,7 @@ public class DictionaryApplication {
 		schPanel.add(sgn, c);
 
 		f.setBounds(650, 200, 400, 200);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(p);
 		f.setVisible(true);
 	}
