@@ -27,7 +27,7 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("data/dictionaries.txt");
+            File input = new File("../data/dictionaries.txt");
             Scanner sc = new Scanner(input);
 
             while (sc.hasNext()) {
