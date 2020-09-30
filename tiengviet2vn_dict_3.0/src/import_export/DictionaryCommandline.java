@@ -1,6 +1,8 @@
 package import_export;
 
-import java.util.*; 
+import java.net.*;
+import java.io.*;
+import java.util.*;
 
 import words_handler.Dictionary;
 import words_handler.Word;
@@ -78,5 +80,53 @@ public class DictionaryCommandline {
         mn.dictionaryExportToFile();
         // mn.dictionaryLookup();
         return mn;
+    }
+
+    public static String sentenceTranslator(String sentence) {
+        try {
+            String link = "https://translate.googleapis.com/translate_a/single?client=gtx";
+            String srcLang = "auto";
+            String desLang = "vi";
+
+            link += ("&sl=" + srcLang);
+            link += ("&tl=" + desLang);
+            link += "&dt=t&q=";
+            link += URLEncoder.encode(sentence, "UTF8");
+
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int status = connection.getResponseCode();
+            // System.out.println(status);
+
+            Scanner resScanner = new Scanner(connection.getInputStream(), "UTF8");
+            String res = resScanner.nextLine();
+            res = res.substring(3, res.length()-12);
+            /*response has the form of [[["something","something",null,null,1]
+              3 is to remove the first three [
+              12 is to remove the last 13 characters ,null,null,1]*/
+
+            for(int i=0; i<res.length(); i++) {
+                if(res.charAt(i) == ',') {
+                    res = res.substring(0, i) + res.substring(i+1);
+                }
+            }
+            int quoteCount = 0;
+            for(int i=0; i<res.length(); i++) {
+                if(res.charAt(i) == '"') {
+                    quoteCount++;
+                }
+                if(quoteCount == 2) {
+                    res = res.substring(1, i);
+                }
+            }
+            // System.out.println(res);
+            return res;
+        } catch (MalformedURLException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return "";
     }
 }

@@ -30,6 +30,7 @@ public class DictionaryApplication {
 		JPanel schPanel = new JPanel();
 		JPanel sbrPanel = new JPanel();
 		JPanel sgnPanel = new JPanel();
+		JButton schButton = new JButton("Search");
 		GridBagConstraints c = new GridBagConstraints();
 		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -40,11 +41,16 @@ public class DictionaryApplication {
 		JScrollPane sgn_scroll = new JScrollPane(sgn);
 
 		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
 		schwd.setBorder(loweredbevel);
 		sgn.setBorder(loweredbevel);
 		def.setBorder(loweredbevel);
 		def.setEditable(false);
+
+		schButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				def.setText(DictionaryCommandline.sentenceTranslator(schwd.getText()));
+			}
+		});
 
 		schwd.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -95,7 +101,7 @@ public class DictionaryApplication {
 		sbrPanel.add(schwd, c);
 
 		GBCfill(c, 1, 0, 0, 1);
-		sbrPanel.add(new JButton("Search"), c);
+		sbrPanel.add(schButton, c);
 
 		GBCfill(c, 0, 0, 1, 0);
 		schPanel.add(sbrPanel, c);
