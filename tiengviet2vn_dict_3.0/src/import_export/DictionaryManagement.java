@@ -30,8 +30,8 @@ public class DictionaryManagement {
         try {
             File input = new File("../data/en.txt");
             File input_ = new File("../data/vi.txt");
-            Scanner sc = new Scanner(input);
-            Scanner sc_ = new Scanner(input_);
+            Scanner sc = new Scanner(input, "UTF-8");
+            Scanner sc_ = new Scanner(input_, "UTF-8");
 
             while (sc.hasNext() && sc_.hasNextLine()) {
                 String target = sc.nextLine();

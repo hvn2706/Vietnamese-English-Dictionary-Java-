@@ -15,10 +15,17 @@ import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
 
 public class DictionaryApplication {
+
+	public static void GBCfill(GridBagConstraints c, int gx, int gy, int wx, int wy) {
+		c.gridx = gx;
+		c.gridy = gy;
+		c.weightx = wx;
+		c.weighty = wy;
+	}
+
 	public static void runApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
-		JFrame f = new JFrame("Testing");
-		JButton b = new JButton("Click here!___");
-		JPanel p = new JPanel(new GridLayout(0, 2));
+		JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
+		JPanel appPanel = new JPanel(new GridLayout(0, 2));
 		JPanel defPanel = new JPanel();
 		JPanel schPanel = new JPanel();
 		JPanel sbrPanel = new JPanel();
@@ -28,7 +35,7 @@ public class DictionaryApplication {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 
 		JTextArea schwd = new JTextArea("Word here");
-		JTextArea def = new JTextArea("Vu Hien xau trai!!!");
+		JTextArea def = new JTextArea("Definition here");
 		JList<String> sgn = new JList<String>();
 		JScrollPane sgn_scroll = new JScrollPane(sgn);
 
@@ -37,6 +44,7 @@ public class DictionaryApplication {
 		schwd.setBorder(loweredbevel);
 		sgn.setBorder(loweredbevel);
 		def.setBorder(loweredbevel);
+		def.setEditable(false);
 
 		schwd.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -69,8 +77,8 @@ public class DictionaryApplication {
 			}
 		});
 
-		p.add(schPanel);
-		p.add(defPanel);
+		appPanel.add(schPanel);
+		appPanel.add(defPanel);
 
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
@@ -80,51 +88,27 @@ public class DictionaryApplication {
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(2, 2, 2, 2);
 
-		c.weightx = 1;
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 0;
+		GBCfill(c, 0, 0, 1, 1);
 		defPanel.add(def, c);
 
-		c.weightx = 1;
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 0;
+		GBCfill(c, 0, 0, 1, 1);
 		sbrPanel.add(schwd, c);
 
-		c.weightx = 0;
-		c.weighty = 1;
-		c.gridx = 1;
-		c.gridy = 0;
+		GBCfill(c, 1, 0, 0, 1);
 		sbrPanel.add(new JButton("Search"), c);
 
-		c.weightx = 1;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 0;
+		GBCfill(c, 0, 0, 1, 0);
 		schPanel.add(sbrPanel, c);
 
-		c.weightx = 1;
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 1;
+		GBCfill(c, 0, 1, 1, 1);
 		schPanel.add(sgnPanel, c);
 
-		// c.weightx = 1;
-		// c.weighty = 1;
-		// c.gridx = 0;
-		// c.gridy = 0;
-		// sgnPanel.add(sgn, c);
-
-		c.weightx = 1;
-		c.weighty = 1;
-		c.gridx = 1;
-		c.gridy = 1;
+		GBCfill(c, 1, 1, 1, 1);
 		sgnPanel.add(sgn_scroll, c);
 
-		f.setBounds(650, 200, 400, 200);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(p);
-		f.setVisible(true);
+		appFrame.setBounds(650, 200, 400, 200);
+		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		appFrame.add(appPanel);
+		appFrame.setVisible(true);
 	}
 }
