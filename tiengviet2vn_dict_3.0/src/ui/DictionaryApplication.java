@@ -15,16 +15,41 @@ import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
 
 public class DictionaryApplication {
+	private final DictionaryCommandline cmd;
+	private final DictionaryManagement mn;
+
+	private final JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
+	private final JPanel appPanel = new JPanel(new GridLayout(0, 2)); // main panel.
+	private final JPanel defPanel = new JPanel(); // definition area
+	private final JPanel schPanel = new JPanel(); // searching area
+	private final JPanel sbrPanel = new JPanel(); // search box area
+	private final JPanel sgnPanel = new JPanel(); // suggestion area
+
+	private final JButton schButton = new JButton("Search");
+	JTextField schwd = new JTextField("Word here");
+	JTextArea def = new JTextArea("Definition here");
+	JList<String> sgn = new JList<String>();
+	JScrollPane sgn_scroll = new JScrollPane(sgn);
+
+	/**
+	 * Constructor.
+	 * @param cmd a DictionaryCommandLine object
+	 * @param mn  a DictionaryManagement object
+	 */
+	public DictionaryApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
+		this.cmd = cmd;
+		this.mn = mn;
+	}
 
 	/**
 	 * fill the GridBadConstraints object with desired properties.
-	 * @param GridBagConstraints c  GridBadConstraints object
-	 * @param int                gx top down position in the grid
-	 * @param int                gy left to right position in the grid
-	 * @param int                wx vertical weight
-	 * @param int                wy horizontal weight
+	 * @param c  GridBadConstraints object
+	 * @param gx top down position in the grid
+	 * @param gy left to right position in the grid
+	 * @param wx vertical weight
+	 * @param wy horizontal weight
 	 */
-	public static void GBCfill(GridBagConstraints c, int gx, int gy, int wx, int wy) {
+	public void GBCfill(GridBagConstraints c, int gx, int gy, int wx, int wy) {
 		c.gridx = gx;
 		c.gridy = gy;
 		c.weightx = wx;
@@ -32,33 +57,9 @@ public class DictionaryApplication {
 	}
 
 	/**
-	 * Run the App with User Interface.
-	 * @param  DictionaryCommandline cmd           a DictionaryCommandLine object
-	 * @param  DictionaryManagement  mn            a DictionaryManagement object
+	 * Add action to components.
 	 */
-	public static void runApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
-		JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
-		JPanel appPanel = new JPanel(new GridLayout(0, 2));
-		JPanel defPanel = new JPanel();
-		JPanel schPanel = new JPanel();
-		JPanel sbrPanel = new JPanel();
-		JPanel sgnPanel = new JPanel();
-		JButton schButton = new JButton("Search");
-		GridBagConstraints c = new GridBagConstraints();
-		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-		Border blackline = BorderFactory.createLineBorder(Color.black);
-
-		JTextField schwd = new JTextField("Word here");
-		JTextArea def = new JTextArea("Definition here");
-		JList<String> sgn = new JList<String>();
-		JScrollPane sgn_scroll = new JScrollPane(sgn);
-
-		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		schwd.setBorder(loweredbevel);
-		sgn.setBorder(loweredbevel);
-		def.setBorder(loweredbevel);
-		def.setEditable(false);
-
+	public void addAction() {
 		schButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				def.setText(DictionaryCommandline.sentenceTranslator(schwd.getText()));
@@ -95,6 +96,23 @@ public class DictionaryApplication {
 				def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 			}
 		});
+	}
+
+	/**
+	 * Run the App with User Interface.
+	 */
+	public void runApplication() {
+		GridBagConstraints c = new GridBagConstraints();
+		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+
+		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		schwd.setBorder(loweredbevel);
+		sgn.setBorder(loweredbevel);
+		def.setBorder(loweredbevel);
+		def.setEditable(false);
+
+		addAction();
 
 		appPanel.add(schPanel);
 		appPanel.add(defPanel);
@@ -125,7 +143,7 @@ public class DictionaryApplication {
 		GBCfill(c, 1, 1, 1, 1);
 		sgnPanel.add(sgn_scroll, c);
 
-		appFrame.setBounds(650, 200, 400, 200);
+		appFrame.setBounds(650, 200, 500, 500);
 		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		appFrame.add(appPanel);
 		appFrame.setVisible(true);
