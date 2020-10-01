@@ -11,6 +11,7 @@ public class Main {
      */
     public static void main(String[] args) {
         DictionaryCommandline cmd = new DictionaryCommandline();
-        DictionaryApplication.runApplication(cmd, cmd.dictionaryAdvance());
+        DictionaryManagement mn = cmd.dictionaryAdvance();
+        DictionaryApplication.runApplication(cmd, mn);
     }
 }
