@@ -16,6 +16,14 @@ import import_export.DictionaryManagement;
 
 public class DictionaryApplication {
 
+	/**
+	 * fill the GridBadConstraints object with desired properties.
+	 * @param GridBagConstraints c  GridBadConstraints object
+	 * @param int                gx top down position in the grid
+	 * @param int                gy left to right position in the grid
+	 * @param int                wx vertical weight
+	 * @param int                wy horizontal weight
+	 */
 	public static void GBCfill(GridBagConstraints c, int gx, int gy, int wx, int wy) {
 		c.gridx = gx;
 		c.gridy = gy;
@@ -23,6 +31,11 @@ public class DictionaryApplication {
 		c.weighty = wy;
 	}
 
+	/**
+	 * Run the App with User Interface.
+	 * @param  DictionaryCommandline cmd           a DictionaryCommandLine object
+	 * @param  DictionaryManagement  mn            a DictionaryManagement object
+	 */
 	public static void runApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
 		JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
 		JPanel appPanel = new JPanel(new GridLayout(0, 2));
