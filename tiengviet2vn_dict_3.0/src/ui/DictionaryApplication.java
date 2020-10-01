@@ -1,15 +1,10 @@
 package ui;
 
 import java.awt.event.*;
-import javax.swing.text.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
-
-import java.io.*; 
-import java.util.List;
-import java.util.ArrayList; 
 
 import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
@@ -18,11 +13,11 @@ public class DictionaryApplication {
 
 	/**
 	 * fill the GridBadConstraints object with desired properties.
-	 * @param GridBagConstraints c  GridBadConstraints object
-	 * @param int                gx top down position in the grid
-	 * @param int                gy left to right position in the grid
-	 * @param int                wx vertical weight
-	 * @param int                wy horizontal weight
+	 * @param c  GridBadConstraints object
+	 * @param gx top down position in the grid
+	 * @param gy left to right position in the grid
+	 * @param wx vertical weight
+	 * @param wy horizontal weight
 	 */
 	public static void GBCfill(GridBagConstraints c, int gx, int gy, int wx, int wy) {
 		c.gridx = gx;
@@ -33,8 +28,8 @@ public class DictionaryApplication {
 
 	/**
 	 * Run the App with User Interface.
-	 * @param  DictionaryCommandline cmd           a DictionaryCommandLine object
-	 * @param  DictionaryManagement  mn            a DictionaryManagement object
+	 * @param cmd           a DictionaryCommandLine object
+	 * @param mn            a DictionaryManagement object
 	 */
 	public static void runApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
 		JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
@@ -46,11 +41,11 @@ public class DictionaryApplication {
 		JButton schButton = new JButton("Search");
 		GridBagConstraints c = new GridBagConstraints();
 		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-		Border blackline = BorderFactory.createLineBorder(Color.black);
+		// Border blackline = BorderFactory.createLineBorder(Color.black);
 
 		JTextField schwd = new JTextField("Word here");
 		JTextArea def = new JTextArea("Definition here");
-		JList<String> sgn = new JList<String>();
+		JList<String> sgn = new JList<>();
 		JScrollPane sgn_scroll = new JScrollPane(sgn);
 
 		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

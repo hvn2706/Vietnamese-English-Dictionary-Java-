@@ -7,7 +7,7 @@ import words_handler.Dictionary;
 import words_handler.Word;
 
 public class DictionaryManagement {
-    private Dictionary dict = new Dictionary();
+    private final Dictionary dict = new Dictionary();
 
     public Dictionary getDict() {
         return dict;
@@ -36,7 +36,7 @@ public class DictionaryManagement {
             while (sc.hasNext() && sc_.hasNextLine()) {
                 String target = sc.nextLine();
                 String explain = sc_.nextLine();
-                Word word = new Word(target, explain);
+                Word word = new Word(target.toLowerCase(), explain.toLowerCase());
                 dict.addWord(word);
             }
 

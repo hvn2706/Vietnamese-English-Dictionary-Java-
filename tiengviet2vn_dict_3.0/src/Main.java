@@ -1,6 +1,4 @@
 import import_export.DictionaryCommandline;
-import words_handler.Dictionary;
-import words_handler.Word;
 import import_export.DictionaryManagement;
 import ui.DictionaryApplication;
 
