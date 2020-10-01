@@ -35,7 +35,7 @@ public class DictionaryApplication {
 		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 
-		JTextArea schwd = new JTextArea("Word here");
+		JTextField schwd = new JTextField("Word here");
 		JTextArea def = new JTextArea("Definition here");
 		JList<String> sgn = new JList<String>();
 		JScrollPane sgn_scroll = new JScrollPane(sgn);
