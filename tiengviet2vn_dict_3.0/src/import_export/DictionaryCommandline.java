@@ -10,7 +10,7 @@ import words_handler.Word;
 public class DictionaryCommandline {
     /**
      * Shows all words in the current Dictionary in the terminal.
-     * @param dict          the current Dictionary
+     * @param dict the current Dictionary
      */
     public void showAllWords(Dictionary dict) {
         System.out.println("No    | English            | Vietnamese");
@@ -43,8 +43,8 @@ public class DictionaryCommandline {
 
     /**
      * Search for words contains the provided String in the current Dictionary.
-     * @param s             the String to be searched
-     * @param dict          the current Dictionary
+     * @param s the String to be searched
+     * @param dict the current Dictionary
      */
     public String[] dictionarySearcher(String s, Dictionary dict) {
         ArrayList<String> l = new ArrayList<>();
@@ -61,8 +61,8 @@ public class DictionaryCommandline {
 
     /**
      * Search for the provided String in the current Dictionary.
-     * @param s             the String to be searched
-     * @param dict          the current Dictionary
+     * @param s    the String to be searched
+     * @param dict the current Dictionary
      */
     public String dictionarySearchExact(String s, Dictionary dict) {
         for (int i = 0; i < dict.getLength(); ++i) {
@@ -76,8 +76,8 @@ public class DictionaryCommandline {
 
     /**
      * Search for words that have the same prefix with the provided String in the current Dictionary.
-     * @param s             the String to be searched
-     * @param dict          the current Dictionary
+     * @param s    the String to be searched
+     * @param dict the current Dictionary
      */
     public String[] dictionarySearchSamePrefix(String s, Dictionary dict) {
         ArrayList<String> l = new ArrayList<>();
@@ -106,7 +106,7 @@ public class DictionaryCommandline {
 
     /**
      * Translate the provided sentence into Vietnamese.
-     * @param sentence      The sentence to be translated
+     * @param sentence The sentence to be translated
      * @return Translated sentence
      */
     public static String sentenceTranslator(String sentence) {
