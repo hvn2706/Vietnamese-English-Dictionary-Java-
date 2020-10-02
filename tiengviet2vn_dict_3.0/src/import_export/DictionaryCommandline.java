@@ -65,6 +65,9 @@ public class DictionaryCommandline {
      * @param dict he current Dictionary
      */
     public String dictionarySearchExact(String s, Dictionary dict) {
+        if (s == null) {
+            return "";
+        }
         for (int i = 0; i < dict.getLength(); ++i) {
             Word tmp = dict.getWord(i);
             if (tmp.getWord_target().toLowerCase().equals(s.toLowerCase())) {
