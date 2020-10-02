@@ -5,7 +5,8 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileWriter;
+import java.io.*;
+import java.util.regex.Pattern;
 
 import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
@@ -20,7 +21,7 @@ public class DictionaryApplication {
 	private final JFrame delFrame = new JFrame(); // remove word window.
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
-	private final JPanel funPanel = new JPanel(new GridLayout(0, 3)); // functional panel
+	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // functional panel
 	private final JPanel wrdPanel = new JPanel(new GridLayout(0, 2));
 	private final JPanel defPanel = new JPanel(); // definition area
 	private final JPanel schPanel = new JPanel(); // searching area
@@ -111,11 +112,13 @@ public class DictionaryApplication {
 			}
 		});
 
-		sgn.addListSelectionListener(e -> {
-			if(e.getValueIsAdjusting()) {
-				return;
+		sgn.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(e.getValueIsAdjusting()) {
+					return;
+				}
+				def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 			}
-			def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 		});
 	}
 
@@ -154,16 +157,29 @@ public class DictionaryApplication {
 		addFrame.add(mainPanel);
 
 		finishAdd.addActionListener(e -> {
+			if (!Pattern.matches(("[a-zA-Z0-9]+"), targField.getText())) {
+				return;
+			}
+
+			if (!Pattern.matches(("[a-zA-Z0-9]+"), explField.getText())) {
+				return;
+			}
+
 			Word word = new Word(targField.getText(), explField.getText());
 			mn.getDict().addWord(word);
 
 			try {
-				FileWriter en = new FileWriter("../data/en.txt");
-				FileWriter vi = new FileWriter("../data/vi.txt");
-				en.write(targField.getText());
-				vi.write(explField.getText());
+				Writer en = new BufferedWriter(new FileWriter("../data/en.txt", true));
+				Writer vi = new BufferedWriter(new FileWriter("../data/vi.txt", true));
+
+				en.append("\n" + targField.getText());
+				vi.append("\n" + explField.getText());
+
 				en.close();
 				vi.close();
+
+				targField.setText("");
+				explField.setText("");
 			} catch (Exception ev) {
 				System.out.println("No path found!");
 			}
@@ -171,10 +187,18 @@ public class DictionaryApplication {
 	}
 
 	public void addDelFrame() {
-		delFrame.setSize(300, 100);
+		delFrame.setSize(252, 100);
 		delFrame.setLocationRelativeTo(null);
+		delFrame.setLayout(null);
 		delFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		delFrame.setPreferredSize(new Dimension(252, 100));
 
+		JLabel msg = new JLabel("Do you want to delete this word ?");
+		JButton yes = new JButton("Yes");
+		JButton no = new JButton("Yesn't");
+
+		yes.setBounds(33, 20, 60, 25);
+		delFrame.add(yes);
 	}
 
 	/**
