@@ -45,6 +45,7 @@ public class DictionaryApplication {
 	public DictionaryApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
 		this.cmd = cmd;
 		this.mn = mn;
+		this.mn.getDict().sortDictionary();
 	}
 
 	/**
@@ -123,7 +124,7 @@ public class DictionaryApplication {
 	}
 
 	/**
-	 * Add lister to add word frame and remove word frame.
+	 * Add word feature
 	 */
 	public void addAddFrame() {
 		addFrame.setSize(300, 100);
@@ -156,6 +157,24 @@ public class DictionaryApplication {
 
 		addFrame.add(mainPanel);
 
+		targField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					explField.requestFocus();
+				}
+			}
+		});
+
+		explField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					finishAdd.doClick();
+				}
+			}
+		});
+
 		finishAdd.addActionListener(e -> {
 			if (!Pattern.matches(("[a-zA-Z]+"), targField.getText())) {
 				return;
@@ -166,7 +185,14 @@ public class DictionaryApplication {
 			}
 
 			Word word = new Word(targField.getText(), explField.getText());
+
+			if (mn.getDict().existed(word)) {
+				JOptionPane.showMessageDialog(addFrame, "This word is already existed!");
+				return;
+			}
+
 			mn.getDict().addWord(word);
+			mn.getDict().sortDictionary();
 
 			try {
 				Writer en = new BufferedWriter(new FileWriter("../data/en.txt", true));
@@ -186,19 +212,38 @@ public class DictionaryApplication {
 		});
 	}
 
+	/**
+	 * Remove word feature.
+	 */
 	public void addDelFrame() {
-		delFrame.setSize(252, 100);
+		delFrame.setSize(250, 75);
+		delFrame.setResizable(false);
 		delFrame.setLocationRelativeTo(null);
-		delFrame.setLayout(null);
 		delFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		delFrame.setPreferredSize(new Dimension(252, 100));
 
-		JLabel msg = new JLabel("Do you want to delete this word ?");
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(null);
+		mainPanel.setPreferredSize(new Dimension(250, 75));
+
+		JLabel msg = new JLabel("Do you want to delete this word ?", SwingConstants.CENTER);
+		JPanel msgPanel = new JPanel(new GridLayout(0, 1));
 		JButton yes = new JButton("Yes");
-		JButton no = new JButton("Yesn't");
+		JButton no = new JButton("No");
 
-		yes.setBounds(33, 20, 60, 25);
-		delFrame.add(yes);
+		msgPanel.setBounds(0, 0, 250, 40);
+		yes.setBounds(35, 40, 60, 25);
+		no.setBounds(155, 40, 60, 25);
+
+		msgPanel.add(msg);
+		mainPanel.add(msgPanel);
+		mainPanel.add(yes);
+		mainPanel.add(no);
+		delFrame.add(mainPanel);
+		delFrame.pack();
+
+		yes.addActionListener(e -> {
+			sgn.getSelectedValue();
+		});
 	}
 
 	/**
