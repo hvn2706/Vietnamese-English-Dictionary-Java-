@@ -157,11 +157,11 @@ public class DictionaryApplication {
 		addFrame.add(mainPanel);
 
 		finishAdd.addActionListener(e -> {
-			if (!Pattern.matches(("[a-zA-Z0-9]+"), targField.getText())) {
+			if (!Pattern.matches(("[a-zA-Z]+"), targField.getText())) {
 				return;
 			}
 
-			if (!Pattern.matches(("[a-zA-Z0-9]+"), explField.getText())) {
+			if (explField.getText().length() == 0) {
 				return;
 			}
 
