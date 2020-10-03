@@ -31,6 +31,16 @@ public class Dictionary {
         words.remove(index);
     }
 
+    public boolean existed(Word w) {
+        for (int i = 0; i < words.size(); ++i) {
+            if (w.getWord_target().equals(words.get(i).getWord_target())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void sortDictionary() {
         Collections.sort(words, new cmpWord());
     }
