@@ -47,7 +47,7 @@ public class DictionaryCommandline {
      * @param dict the current Dictionary
      */
     public String[] dictionarySearcher(String s, Dictionary dict) {
-        ArrayList<String> l = new ArrayList<String>();
+        ArrayList<String> l = new ArrayList<>();
         for (int i = 0; i < dict.getLength(); ++i) {
             Word tmp = dict.getWord(i);
             if (tmp.getWord_target().toLowerCase().contains(s.toLowerCase())) {
@@ -62,7 +62,7 @@ public class DictionaryCommandline {
     /**
      * Search for the provided String in the current Dictionary.
      * @param s    the String to be searched
-     * @param dict he current Dictionary
+     * @param dict the current Dictionary
      */
     public String dictionarySearchExact(String s, Dictionary dict) {
         if (s == null) {
@@ -83,7 +83,7 @@ public class DictionaryCommandline {
      * @param dict the current Dictionary
      */
     public String[] dictionarySearchSamePrefix(String s, Dictionary dict) {
-        ArrayList<String> l = new ArrayList<String>();
+        ArrayList<String> l = new ArrayList<>();
         for (int i = 0; i < dict.getLength(); ++i) {
             Word tmp = dict.getWord(i);
             if (tmp.getWord_target().toLowerCase().startsWith(s.toLowerCase())) {
@@ -152,10 +152,9 @@ public class DictionaryCommandline {
             }
             // System.out.println(res);
             return res;
-        } catch (MalformedURLException e) {
-            System.out.println(e);
         } catch (IOException e) {
-            System.out.println(e);
+            // System.out.println(e);
+            e.printStackTrace();
         }
         return "";
     }

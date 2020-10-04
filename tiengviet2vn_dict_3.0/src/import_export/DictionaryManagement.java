@@ -23,7 +23,7 @@ public class DictionaryManagement {
             while (sc.hasNext() && sc_.hasNextLine()) {
                 String target = sc.nextLine();
                 String explain = sc_.nextLine();
-                Word word = new Word(target, explain);
+                Word word = new Word(target.toLowerCase(), explain.toLowerCase());
                 dict.addWord(word);
             }
 
