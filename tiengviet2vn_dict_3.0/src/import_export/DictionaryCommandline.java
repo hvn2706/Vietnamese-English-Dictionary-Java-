@@ -110,6 +110,7 @@ public class DictionaryCommandline {
      * @return Translated sentence
      */
     public static String sentenceTranslator(String sentence) {
+        if(sentence.isEmpty()) return "";
         try {
             String link = "https://translate.googleapis.com/translate_a/single?client=gtx";
             String srcLang = "auto";
@@ -127,30 +128,53 @@ public class DictionaryCommandline {
             // System.out.println(status);
 
             Scanner resScanner = new Scanner(connection.getInputStream(), "UTF8");
-            String res = resScanner.nextLine();
-            res = res.substring(3, res.length()-12);
-            /*response has the form of [[["something","something",null,null,1]
-              3 is to remove the first three [
-              12 is to remove the last 13 characters ,null,null,1]*/
+            String res = ""; //Response
+            String trs = ""; //Translated sentence
 
-            for(int i=0; i<res.length(); i++) {
-                if(res.charAt(i) == ',') {
-                    res = res.substring(0, i) + res.substring(i+1);
+            while(resScanner.hasNextLine()) {
+                res += resScanner.nextLine() + "\n";
+            }
+            //JSON Processing
+            res = res.substring(1, res.length()-1);
+            int count = 1; //Counts "[]"
+            int count_ = 0; //Counts """"
+            int left = 0; //Starting index
+            for(int i=1;i<res.length();i++) {
+                if(res.charAt(i) == '[') {
+                    count++;
+                }
+                if(res.charAt(i) == ']') {
+                    count--;
+                }
+                if(count == 0) {
+                    res = res.substring(0, i+1);
+                    break;
                 }
             }
-            int quoteCount = 0;
-            for(int i=0; i<res.length(); i++) {
-                if(res.charAt(i) == '"') {
-                    quoteCount++;
+            res = res.substring(1, res.length()-1);
+            count = 0;
+            for(int i=0;i<res.length();i++) {
+                if(res.charAt(i) == '[') {
+                    count++;
                 }
-                if(quoteCount == 2) {
-                    res = res.substring(1, i);
+                if(res.charAt(i) == ']') {
+                    count--;
+                }
+                if(count == 0) {
+                    count_ = 0;
+                } else if(count == 1) {
+                    if(res.charAt(i) == '"') {
+                        count_++;
+                        if(count_ == 1) left = i + 1;
+                        if(count_ == 2) {
+                            trs += res.substring(left, i);
+                        }
+                    }
                 }
             }
-            // System.out.println(res);
-            return res;
+            //JSON Processing
+            return trs;
         } catch (IOException e) {
-            // System.out.println(e);
             e.printStackTrace();
         }
         return "";

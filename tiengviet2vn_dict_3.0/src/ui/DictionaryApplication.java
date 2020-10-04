@@ -19,20 +19,29 @@ public class DictionaryApplication {
 	private final JFrame addFrame = new JFrame(); // add word window.
 	private final JFrame delFrame = new JFrame(); // remove word window.
 
+	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator"); //sentence translation dialog
+
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
-	private final JPanel funPanel = new JPanel(new GridLayout(0, 3)); // functional panel
+	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // functional panel
 	private final JPanel wrdPanel = new JPanel(new GridLayout(0, 2));
 	private final JPanel defPanel = new JPanel(); // definition area
 	private final JPanel schPanel = new JPanel(); // searching area
 	private final JPanel sbrPanel = new JPanel(); // search box area
 	private final JPanel sgnPanel = new JPanel(); // suggestion area
+	private final JPanel strPanel = new JPanel(); // sentence to be translated panel
+	private final JPanel trsPanel = new JPanel(); // translated sentence panel
 
 	private final JButton schButton = new JButton("Search");
 	private final JButton addButton = new JButton("Add word");
 	private final JButton delButton = new JButton("Remove word");
 	private final JButton favButton = new JButton("My favourite words");
+	private final JButton strButton = new JButton("Sentence Translator");
+	private final JButton trsButton = new JButton("Translate");
+
 	JTextField schwd = new JTextField("Word here");
 	JTextArea def = new JTextArea("Definition here");
+	JTextArea sntce = new JTextArea("Sentence here");
+	JTextArea trs = new JTextArea("Translated sentence here");
 	JList<String> sgn = new JList<String>();
 	JScrollPane sgn_scroll = new JScrollPane(sgn);
 
@@ -77,9 +86,21 @@ public class DictionaryApplication {
 			}
 		});
 
+		trsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				trs.setText(DictionaryCommandline.sentenceTranslator(sntce.getText()));
+			}
+		});
+
 		favButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+			}
+		});
+
+		strButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				strDialog.setVisible(true);
 			}
 		});
 
@@ -177,12 +198,48 @@ public class DictionaryApplication {
 
 	}
 
+	public void addStrDialog() {
+		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+
+		strDialog.setSize(350, 200);
+		strDialog.setLocationRelativeTo(null);
+		strDialog.add(strPanel);
+
+		strPanel.setLayout(new GridBagLayout());
+		trsPanel.setLayout(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(2, 2, 2, 2);
+
+		sntce.setBorder(loweredbevel);
+		sntce.setLineWrap(true);
+		sntce.setWrapStyleWord(true);
+		trs.setBorder(loweredbevel);
+		trs.setEditable(false);
+		trs.setLineWrap(true);
+		trs.setWrapStyleWord(true);
+
+		GBCfill(c, 0, 0, 1, 1);
+		strPanel.add(trsPanel, c);
+
+		GBCfill(c, 0, 0, 1, 0);
+		trsPanel.add(trsButton, c);
+
+		GBCfill(c, 0, 1, 1, 1);
+		trsPanel.add(sntce, c);
+
+		GBCfill(c, 1, 0, 1, 1);
+		strPanel.add(trs, c);
+	}
+
 	/**
 	 * Run the App with User Interface.
 	 */
 	public void runApplication() {
 		addAddFrame();
 		addDelFrame();
+		addStrDialog();
 
 		def.setLineWrap(true);
 		GridBagConstraints c = new GridBagConstraints();
@@ -202,6 +259,7 @@ public class DictionaryApplication {
 		funPanel.add(addButton);
 		funPanel.add(delButton);
 		funPanel.add(favButton);
+		funPanel.add(strButton);
 
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
