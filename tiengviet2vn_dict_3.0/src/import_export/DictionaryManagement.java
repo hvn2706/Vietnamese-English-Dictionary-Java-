@@ -69,4 +69,52 @@ public class DictionaryManagement {
             System.out.println("No path found!");
         }
     }
+
+    public void deleteFromFile(String remove) {
+        int index = 0;
+        try {
+            File en = new File("../data/en.txt");
+            File vi = new File("../data/vi.txt");
+            Scanner sc1 = new Scanner(en);
+            Scanner sc2 = new Scanner(vi);
+            String editen = "";
+            String editvi = "";
+
+            int itmp = 0;
+            while (sc1.hasNextLine() && sc2.hasNextLine()) {
+                String tmpen = sc1.nextLine();
+                String tmpvi = sc2.nextLine();
+
+                itmp++;
+                if (remove.equals(tmpen)) {
+                    index = itmp;
+                    continue;
+                }
+                editen += tmpen;
+                editen += "\n";
+                editvi += tmpvi;
+                editvi += "\n";
+            }
+
+            FileWriter outfile1 = new FileWriter("../data/en.txt");
+            outfile1.write(editen);
+            outfile1.close();
+            sc1.close();
+
+            FileWriter outfile2 = new FileWriter("../data/vi.txt");
+            outfile2.write(editvi);
+            outfile2.close();
+            sc2.close();
+
+            for (int i = 0; i < dict.getLength(); ++i) {
+                if (dict.getWord(i).getWord_target().equals(remove)) {
+                    index = i;
+                    break;
+                }
+            }
+            dict.removeWord(index);
+        } catch (Exception ev) {
+            System.out.println("No path found!");
+        }
+    }
 }
