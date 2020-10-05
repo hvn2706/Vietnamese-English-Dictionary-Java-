@@ -33,7 +33,7 @@ public class Dictionary {
 
     public boolean existed(Word w) {
         for (int i = 0; i < words.size(); ++i) {
-            if (w.getWord_target().equals(words.get(i).getWord_target())) {
+            if (w.getWord_target().toLowerCase().equals(words.get(i).getWord_target().toLowerCase())) {
                 return true;
             }
         }
