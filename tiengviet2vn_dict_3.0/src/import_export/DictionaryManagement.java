@@ -71,8 +71,8 @@ public class DictionaryManagement {
     }
 
     public void deleteFromFile(String remove) {
-        int index = 0;
         try {
+            int index = 0;
             File en = new File("../data/en.txt");
             File vi = new File("../data/vi.txt");
             Scanner sc1 = new Scanner(en);
@@ -80,14 +80,11 @@ public class DictionaryManagement {
             String editen = "";
             String editvi = "";
 
-            int itmp = 0;
             while (sc1.hasNextLine() && sc2.hasNextLine()) {
                 String tmpen = sc1.nextLine();
                 String tmpvi = sc2.nextLine();
 
-                itmp++;
                 if (remove.equals(tmpen)) {
-                    index = itmp;
                     continue;
                 }
                 editen += tmpen;
