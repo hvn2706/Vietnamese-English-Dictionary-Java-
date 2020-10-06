@@ -17,8 +17,8 @@ public class DictionaryApplication {
 	private final DictionaryManagement mn;
 
 	private final JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
-	private final JFrame addFrame = new JFrame(); // add word window.
-	private final JFrame delFrame = new JFrame(); // remove word window.
+	private final JDialog addFrame = new JDialog(appFrame, "Add word."); // add word window.
+	private final JDialog delFrame = new JDialog(appFrame, "Confirm."); // remove word window.
 
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator"); //sentence translation dialog
 
@@ -84,7 +84,11 @@ public class DictionaryApplication {
 
 		delButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				delFrame.setVisible(true);
+				if (sgn.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
+					return;
+				}
+				else delFrame.setVisible(true);
 			}
 		});
 
@@ -150,8 +154,6 @@ public class DictionaryApplication {
 	public void addAddFrame() {
 		addFrame.setSize(300, 100);
 		addFrame.setLocationRelativeTo(null);
-		addFrame.setResizable(false);
-		addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		JPanel targPanel = new JPanel(new GridLayout(2, 0));
 		JPanel explPanel = new JPanel(new GridLayout(2, 0));
@@ -263,7 +265,12 @@ public class DictionaryApplication {
 		delFrame.pack();
 
 		yes.addActionListener(e -> {
-			sgn.getSelectedValue();
+			if (sgn.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(delFrame, "You must select a word to delete in the Dictionary!");
+			} else {
+				mn.deleteFromFile(sgn.getSelectedValue());
+			}
+			delFrame.dispose();
 		});
 	}
 
