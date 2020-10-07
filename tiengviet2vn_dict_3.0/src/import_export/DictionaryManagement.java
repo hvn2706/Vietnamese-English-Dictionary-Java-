@@ -1,7 +1,6 @@
 package import_export;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.Scanner;
 import words_handler.Dictionary;
 import words_handler.Word;
@@ -16,11 +15,18 @@ public class DictionaryManagement {
     public void insertFromFile() {
         try {
             File input = new File("../data/AnhViet.dict");
+            File ignore = new File("../data/remove.txt");
             Scanner sc = new Scanner(input, "UTF-8");
+            Scanner igsc = new Scanner(ignore, "UTF-8");
 
             String target = "";
             String explain = "";
-            String tmp = "";
+            String tmp;
+
+            String ignoreContent = "";
+            while (igsc.hasNextLine()) {
+                ignoreContent += (igsc.nextLine() + "\n");
+            }
 
             while (sc.hasNextLine()) {
                 tmp = sc.nextLine();
@@ -28,7 +34,9 @@ public class DictionaryManagement {
                     continue;
                 } else if (tmp.charAt(0) == '@') {
                     if (!target.equals("") && !explain.equals("")) {
-                        dict.addWord(new Word(target, explain));
+                        if (!ignoreContent.contains(target) && !ignoreContent.contains(explain)) {
+                            dict.addWord(new Word(target, explain));
+                        }
                     }
 
                     for (int i = 0; i < tmp.length(); ++i) {
@@ -49,45 +57,12 @@ public class DictionaryManagement {
         }
     }
 
-    public void dictionaryExportToFile() {
+    public void deleteFromFile(String target, String explain) {
         try {
-            FileWriter file = new FileWriter("../data/output.txt");
-            file.write("No    | English            | Vietnamese\n");
-
-            dict.sortDictionary();
-            for (int i = 0; i < dict.getLength(); ++i) {
-                String no = String.valueOf(i + 1);
-                for (int j = 0; j < 6; ++j) {
-                    if (j >= no.length()) {
-                        file.write(' ');
-                    } else {
-                        file.write(no.charAt(j));
-                    }
-                }
-                file.write("| ");
-
-                String target = dict.getWord(i).getWord_target();
-                for (int j = 0; j < 19; ++j) {
-                    if (j >= target.length()) {
-                        file.write(' ');
-                    } else {
-                        file.write(target.charAt(j));
-                    }
-                }
-                file.write("| ");
-
-                String explain = dict.getWord(i).getWord_explain();
-                file.write(explain + "\n");
-            }
-            file.close();
-        } catch (Exception e) {
-            System.out.println("No path found!");
-        }
-    }
-
-    public void deleteFromFile(String remove) {
-        try {
-
+            Writer ignore = new BufferedWriter(new FileWriter("../data/remove.txt", true));
+            ignore.append("\n\n@").append(target).append(" ").append(explain);
+            dict.removeWord(target, explain);
+            ignore.close();
         } catch (Exception ev) {
             System.out.println("No path found!");
         }
