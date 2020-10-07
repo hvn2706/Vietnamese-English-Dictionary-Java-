@@ -45,6 +45,7 @@ public class DictionaryApplication {
 	JTextArea trs = new JTextArea("Translated sentence here");
 	JList<String> sgn = new JList<String>();
 	JScrollPane sgn_scroll = new JScrollPane(sgn);
+	JScrollPane def_scroll = new JScrollPane(def);
 
 	/**
 	 * Constructor.
@@ -318,11 +319,13 @@ public class DictionaryApplication {
 		addStrDialog();
 
 		def.setLineWrap(true);
+		def.setWrapStyleWord(true);
 		GridBagConstraints c = new GridBagConstraints();
 		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 
 		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		def_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		schwd.setBorder(loweredbevel);
 		sgn.setBorder(loweredbevel);
 		def.setBorder(loweredbevel);
@@ -346,7 +349,7 @@ public class DictionaryApplication {
 		c.insets = new Insets(2, 2, 2, 2);
 
 		GBCfill(c, 0, 0, 1, 1);
-		defPanel.add(def, c);
+		defPanel.add(def_scroll, c);
 
 		GBCfill(c, 0, 0, 1, 1);
 		sbrPanel.add(schwd, c);
