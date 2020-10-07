@@ -17,10 +17,9 @@ public class DictionaryApplication {
 	private final DictionaryManagement mn;
 
 	private final JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
-	private final JDialog addFrame = new JDialog(appFrame, "Add word."); // add word window.
-	private final JDialog delFrame = new JDialog(appFrame, "Confirm."); // remove word window.
-
-	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator"); //sentence translation dialog
+	private final JDialog addFrame = new JDialog(appFrame, "Add word.", true); // add word window.
+	private final JDialog delFrame = new JDialog(appFrame, "Confirm.", true); // remove word window.
+	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator", true); //sentence translation dialog
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
 	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // functional panel
