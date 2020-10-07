@@ -13,19 +13,6 @@ public class DictionaryManagement {
         return dict;
     }
 
-    public void insertFromCommandline() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-
-        for (int i = 0; i < n; ++i) {
-            String target = sc.next();
-            String explain = sc.next();
-            Word word = new Word(target, explain);
-            dict.addWord(word);
-        }
-        sc.close();
-    }
-
     public void insertFromFile() {
         try {
             File input = new File("../data/en.txt");
@@ -83,22 +70,48 @@ public class DictionaryManagement {
         }
     }
 
-    public void dictionaryLookup() {
-        Scanner sc = new Scanner(System.in);
+    public void deleteFromFile(String remove) {
+        try {
+            int index = 0;
+            File en = new File("../data/en.txt");
+            File vi = new File("../data/vi.txt");
+            Scanner sc1 = new Scanner(en);
+            Scanner sc2 = new Scanner(vi);
+            String editen = "";
+            String editvi = "";
 
-        while (true) {
-            System.out.print("\tSearch: ");
-            String s = sc.nextLine();
+            while (sc1.hasNextLine() && sc2.hasNextLine()) {
+                String tmpen = sc1.nextLine();
+                String tmpvi = sc2.nextLine();
+
+                if (remove.equals(tmpen)) {
+                    continue;
+                }
+                editen += tmpen;
+                editen += "\n";
+                editvi += tmpvi;
+                editvi += "\n";
+            }
+
+            FileWriter outfile1 = new FileWriter("../data/en.txt");
+            outfile1.write(editen);
+            outfile1.close();
+            sc1.close();
+
+            FileWriter outfile2 = new FileWriter("../data/vi.txt");
+            outfile2.write(editvi);
+            outfile2.close();
+            sc2.close();
+
             for (int i = 0; i < dict.getLength(); ++i) {
-                Word tmp = dict.getWord(i);
-                if (tmp.getWord_target().toLowerCase().contains(s.toLowerCase())) {
-                    System.out.println(tmp.getWord_target() + " " + tmp.getWord_explain());
+                if (dict.getWord(i).getWord_target().equals(remove)) {
+                    index = i;
+                    break;
                 }
             }
-
-            if (s.equals("-1")) {
-                break;
-            }
+            dict.removeWord(index);
+        } catch (Exception ev) {
+            System.out.println("No path found!");
         }
     }
 }

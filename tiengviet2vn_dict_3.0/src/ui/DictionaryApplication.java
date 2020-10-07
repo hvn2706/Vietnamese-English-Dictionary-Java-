@@ -5,7 +5,8 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileWriter;
+import java.io.*;
+import java.util.regex.Pattern;
 
 import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
@@ -16,8 +17,8 @@ public class DictionaryApplication {
 	private final DictionaryManagement mn;
 
 	private final JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
-	private final JFrame addFrame = new JFrame(); // add word window.
-	private final JFrame delFrame = new JFrame(); // remove word window.
+	private final JDialog addFrame = new JDialog(appFrame, "Add word."); // add word window.
+	private final JDialog delFrame = new JDialog(appFrame, "Confirm."); // remove word window.
 
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator"); //sentence translation dialog
 
@@ -53,6 +54,7 @@ public class DictionaryApplication {
 	public DictionaryApplication(DictionaryCommandline cmd, DictionaryManagement mn) {
 		this.cmd = cmd;
 		this.mn = mn;
+		this.mn.getDict().sortDictionary();
 	}
 
 	/**
@@ -82,7 +84,11 @@ public class DictionaryApplication {
 
 		delButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				delFrame.setVisible(true);
+				if (sgn.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
+					return;
+				}
+				else delFrame.setVisible(true);
 			}
 		});
 
@@ -132,22 +138,22 @@ public class DictionaryApplication {
 			}
 		});
 
-		sgn.addListSelectionListener(e -> {
-			if(e.getValueIsAdjusting()) {
-				return;
+		sgn.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(e.getValueIsAdjusting()) {
+					return;
+				}
+				def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 			}
-			def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 		});
 	}
 
 	/**
-	 * Add lister to add word frame and remove word frame.
+	 * Add word feature
 	 */
 	public void addAddFrame() {
 		addFrame.setSize(300, 100);
 		addFrame.setLocationRelativeTo(null);
-		addFrame.setResizable(false);
-		addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		JPanel targPanel = new JPanel(new GridLayout(2, 0));
 		JPanel explPanel = new JPanel(new GridLayout(2, 0));
@@ -174,28 +180,98 @@ public class DictionaryApplication {
 
 		addFrame.add(mainPanel);
 
+		targField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					explField.requestFocus();
+				}
+			}
+		});
+
+		explField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					finishAdd.doClick();
+				}
+			}
+		});
+
 		finishAdd.addActionListener(e -> {
+			if (!Pattern.matches(("[a-zA-Z]+"), targField.getText())) {
+				return;
+			}
+
+			if (explField.getText().length() == 0) {
+				return;
+			}
+
 			Word word = new Word(targField.getText(), explField.getText());
+
+			if (mn.getDict().existed(word)) {
+				JOptionPane.showMessageDialog(addFrame, "This word is already existed!");
+				return;
+			}
+
 			mn.getDict().addWord(word);
+			mn.getDict().sortDictionary();
 
 			try {
-				FileWriter en = new FileWriter("../data/en.txt");
-				FileWriter vi = new FileWriter("../data/vi.txt");
-				en.write(targField.getText());
-				vi.write(explField.getText());
+				Writer en = new BufferedWriter(new FileWriter("../data/en.txt", true));
+				Writer vi = new BufferedWriter(new FileWriter("../data/vi.txt", true));
+
+				en.append("\n" + targField.getText());
+				vi.append("\n" + explField.getText());
+
 				en.close();
 				vi.close();
+
+				targField.setText("");
+				explField.setText("");
 			} catch (Exception ev) {
 				System.out.println("No path found!");
 			}
 		});
 	}
 
+	/**
+	 * Remove word feature.
+	 */
 	public void addDelFrame() {
-		delFrame.setSize(300, 100);
+		delFrame.setSize(250, 75);
+		delFrame.setResizable(false);
 		delFrame.setLocationRelativeTo(null);
 		delFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(null);
+		mainPanel.setPreferredSize(new Dimension(250, 75));
+
+		JLabel msg = new JLabel("Do you want to delete this word ?", SwingConstants.CENTER);
+		JPanel msgPanel = new JPanel(new GridLayout(0, 1));
+		JButton yes = new JButton("Yes");
+		JButton no = new JButton("No");
+
+		msgPanel.setBounds(0, 0, 250, 40);
+		yes.setBounds(35, 40, 60, 25);
+		no.setBounds(155, 40, 60, 25);
+
+		msgPanel.add(msg);
+		mainPanel.add(msgPanel);
+		mainPanel.add(yes);
+		mainPanel.add(no);
+		delFrame.add(mainPanel);
+		delFrame.pack();
+
+		yes.addActionListener(e -> {
+			if (sgn.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(delFrame, "You must select a word to delete in the Dictionary!");
+			} else {
+				mn.deleteFromFile(sgn.getSelectedValue());
+			}
+			delFrame.dispose();
+		});
 	}
 
 	public void addStrDialog() {
