@@ -31,6 +31,17 @@ public class Dictionary {
         words.remove(index);
     }
 
+    public void removeWord(String target, String explain) {
+        for (int i = 0; i < words.size(); ++i) {
+            if (target.toLowerCase().equals(words.get(i).getWord_target().toLowerCase())) {
+                if (explain.toLowerCase().equals(words.get(i).getWord_explain().toLowerCase())) {
+                    words.remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
     public boolean existed(Word w) {
         for (int i = 0; i < words.size(); ++i) {
             if (w.getWord_target().toLowerCase().equals(words.get(i).getWord_target().toLowerCase())) {

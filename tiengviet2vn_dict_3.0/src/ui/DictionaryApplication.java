@@ -6,7 +6,6 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.regex.Pattern;
 
 import import_export.DictionaryCommandline;
 import import_export.DictionaryManagement;
@@ -34,7 +33,6 @@ public class DictionaryApplication {
 	private final JButton schButton = new JButton("Search");
 	private final JButton addButton = new JButton("Add word");
 	private final JButton delButton = new JButton("Remove word");
-	private final JButton favButton = new JButton("My favourite words");
 	private final JButton strButton = new JButton("Sentence Translator");
 	private final JButton trsButton = new JButton("Translate");
 
@@ -95,12 +93,6 @@ public class DictionaryApplication {
 		trsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				trs.setText(DictionaryCommandline.sentenceTranslator(sntce.getText()));
-			}
-		});
-
-		favButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
 			}
 		});
 
@@ -303,7 +295,7 @@ public class DictionaryApplication {
 			if (sgn.getSelectedValue() == null) {
 				JOptionPane.showMessageDialog(delFrame, "You must select a word to delete in the Dictionary!");
 			} else {
-				mn.deleteFromFile(sgn.getSelectedValue());
+				mn.deleteFromFile(sgn.getSelectedValue(), def.getText());
 			}
 			delFrame.dispose();
 		});
@@ -370,7 +362,6 @@ public class DictionaryApplication {
 		wrdPanel.add(defPanel);
 		funPanel.add(addButton);
 		funPanel.add(delButton);
-		funPanel.add(favButton);
 		funPanel.add(strButton);
 
 		defPanel.setLayout(new GridBagLayout());
