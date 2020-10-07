@@ -157,6 +157,10 @@ public class DictionaryCommandline {
             res = res.substring(1, res.length()-1);
             count = 0;
             for(int i=0;i<res.length();i++) {
+                if(res.charAt(i) == '\\') {
+                    i++;
+                    continue;
+                }
                 if(res.charAt(i) == '[') {
                     count++;
                 }
@@ -173,6 +177,11 @@ public class DictionaryCommandline {
                             trs += res.substring(left, i);
                         }
                     }
+                }
+            }
+            for(int i=0;i<trs.length();i++) {
+                if(trs.charAt(i) == '\\') {
+                    trs = trs.substring(0, i) + trs.substring(i+1); 
                 }
             }
             //JSON Processing
