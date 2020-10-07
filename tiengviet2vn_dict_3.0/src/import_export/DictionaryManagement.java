@@ -15,20 +15,35 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("../data/en.txt");
-            File input_ = new File("../data/vi.txt");
+            File input = new File("../data/AnhViet.dict");
             Scanner sc = new Scanner(input, "UTF-8");
-            Scanner sc_ = new Scanner(input_, "UTF-8");
 
-            while (sc.hasNext() && sc_.hasNextLine()) {
-                String target = sc.nextLine();
-                String explain = sc_.nextLine();
-                Word word = new Word(target.toLowerCase(), explain.toLowerCase());
-                dict.addWord(word);
+            String target = "";
+            String explain = "";
+            String tmp = "";
+
+            while (sc.hasNextLine()) {
+                tmp = sc.nextLine();
+                if (tmp.isEmpty()) {
+                    continue;
+                } else if (tmp.charAt(0) == '@') {
+                    if (!target.equals("") && !explain.equals("")) {
+                        dict.addWord(new Word(target, explain));
+                    }
+
+                    for (int i = 0; i < tmp.length(); ++i) {
+                        if (tmp.charAt(i) == '/') {
+                            target = tmp.substring(1, i - 1);
+                            explain = tmp.substring(i) + "\n"; // substring from i to end.
+                            break;
+                        }
+                    }
+                } else {
+                    explain += tmp + "\n";
+                }
             }
-
+            dict.addWord(new Word(target, explain));
             sc.close();
-            sc_.close();
         } catch (IOException e) {
             System.out.println("File not found");
         }
@@ -72,44 +87,7 @@ public class DictionaryManagement {
 
     public void deleteFromFile(String remove) {
         try {
-            int index = 0;
-            File en = new File("../data/en.txt");
-            File vi = new File("../data/vi.txt");
-            Scanner sc1 = new Scanner(en);
-            Scanner sc2 = new Scanner(vi);
-            String editen = "";
-            String editvi = "";
 
-            while (sc1.hasNextLine() && sc2.hasNextLine()) {
-                String tmpen = sc1.nextLine();
-                String tmpvi = sc2.nextLine();
-
-                if (remove.equals(tmpen)) {
-                    continue;
-                }
-                editen += tmpen;
-                editen += "\n";
-                editvi += tmpvi;
-                editvi += "\n";
-            }
-
-            FileWriter outfile1 = new FileWriter("../data/en.txt");
-            outfile1.write(editen);
-            outfile1.close();
-            sc1.close();
-
-            FileWriter outfile2 = new FileWriter("../data/vi.txt");
-            outfile2.write(editvi);
-            outfile2.close();
-            sc2.close();
-
-            for (int i = 0; i < dict.getLength(); ++i) {
-                if (dict.getWord(i).getWord_target().equals(remove)) {
-                    index = i;
-                    break;
-                }
-            }
-            dict.removeWord(index);
         } catch (Exception ev) {
             System.out.println("No path found!");
         }
