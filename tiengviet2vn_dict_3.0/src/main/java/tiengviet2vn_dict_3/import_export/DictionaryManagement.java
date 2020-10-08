@@ -15,7 +15,7 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("../data/AnhViet.dict");
+            File input = new File("./data/AnhViet.dict");
             Scanner sc = new Scanner(input, "UTF-8");
 
             String target = "";
@@ -51,7 +51,7 @@ public class DictionaryManagement {
 
     public void dictionaryExportToFile() {
         try {
-            FileWriter file = new FileWriter("../data/output.txt");
+            FileWriter file = new FileWriter("./data/output.txt");
             file.write("No    | English            | Vietnamese\n");
 
             dict.sortDictionary();
