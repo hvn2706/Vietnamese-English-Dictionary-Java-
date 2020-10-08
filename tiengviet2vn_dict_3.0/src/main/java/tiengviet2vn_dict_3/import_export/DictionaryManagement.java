@@ -17,12 +17,12 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("../data/AnhViet.dict"), StandardCharsets.UTF_8));
+            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("./data/AnhViet.dict"), StandardCharsets.UTF_8));
 
             String target = "";
             String explain = "";
 
-            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("../data/remove.txt"), StandardCharsets.UTF_8));
+            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("./data/remove.txt"), StandardCharsets.UTF_8));
             String ignoreContent = "";
 
             for (int i = 0; i < ignore.size(); ++i) {
@@ -58,7 +58,7 @@ public class DictionaryManagement {
 
     public void deleteFromFile(String target, String explain) {
         try {
-            Writer ignore = new BufferedWriter(new FileWriter("../data/remove.txt", true));
+            Writer ignore = new BufferedWriter(new FileWriter("./data/remove.txt", true));
             ignore.append("\n\n@").append(target).append(" ").append(explain);
             dict.removeWord(target, explain);
             ignore.close();
