@@ -1,8 +1,10 @@
 package import_export;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import words_handler.Dictionary;
 import words_handler.Word;
 
@@ -15,79 +17,51 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("../data/AnhViet.dict");
-            Scanner sc = new Scanner(input, "UTF-8");
+            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("../data/AnhViet.dict"), StandardCharsets.UTF_8));
 
             String target = "";
             String explain = "";
-            String tmp = "";
 
-            while (sc.hasNextLine()) {
-                tmp = sc.nextLine();
-                if (tmp.isEmpty()) {
+            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("../data/remove.txt"), StandardCharsets.UTF_8));
+            String ignoreContent = "";
+
+            for (int i = 0; i < ignore.size(); ++i) {
+                ignoreContent += (ignore.get(i) + "\n");
+            }
+
+            for (String s : inputContent) {
+                if (s.isEmpty()) {
                     continue;
-                } else if (tmp.charAt(0) == '@') {
+                } else if (s.charAt(0) == '@') {
                     if (!target.equals("") && !explain.equals("")) {
-                        dict.addWord(new Word(target, explain));
+                        if (!ignoreContent.contains(target) && !ignoreContent.contains(explain)) {
+                            dict.addWord(new Word(target, explain));
+                        }
                     }
 
-                    for (int i = 0; i < tmp.length(); ++i) {
-                        if (tmp.charAt(i) == '/') {
-                            target = tmp.substring(1, i - 1);
-                            explain = tmp.substring(i) + "\n"; // substring from i to end.
+                    for (int j = 0; j < s.length(); ++j) {
+                        if (s.charAt(j) == '/') {
+                            target = s.substring(1, j - 1);
+                            explain = s.substring(j) + "\n"; // substring from i to end.
                             break;
                         }
                     }
                 } else {
-                    explain += tmp + "\n";
+                    explain += s + "\n";
                 }
             }
             dict.addWord(new Word(target, explain));
-            sc.close();
         } catch (IOException e) {
             System.out.println("File not found");
         }
     }
 
-    public void dictionaryExportToFile() {
+    public void deleteFromFile(String target, String explain) {
         try {
-            FileWriter file = new FileWriter("../data/output.txt");
-            file.write("No    | English            | Vietnamese\n");
-
-            dict.sortDictionary();
-            for (int i = 0; i < dict.getLength(); ++i) {
-                String no = String.valueOf(i + 1);
-                for (int j = 0; j < 6; ++j) {
-                    if (j >= no.length()) {
-                        file.write(' ');
-                    } else {
-                        file.write(no.charAt(j));
-                    }
-                }
-                file.write("| ");
-
-                String target = dict.getWord(i).getWord_target();
-                for (int j = 0; j < 19; ++j) {
-                    if (j >= target.length()) {
-                        file.write(' ');
-                    } else {
-                        file.write(target.charAt(j));
-                    }
-                }
-                file.write("| ");
-
-                String explain = dict.getWord(i).getWord_explain();
-                file.write(explain + "\n");
-            }
-            file.close();
-        } catch (Exception e) {
-            System.out.println("No path found!");
-        }
-    }
-
-    public void deleteFromFile(String remove) {
-        try {
-
+            Writer ignore = new BufferedWriter(new FileWriter("../data/remove.txt", true));
+            ignore.append("\n\n@").append(target).append(" ").append(explain);
+            dict.removeWord(target, explain);
+            ignore.close();
         } catch (Exception ev) {
             System.out.println("No path found!");
         }
