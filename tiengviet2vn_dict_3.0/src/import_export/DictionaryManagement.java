@@ -1,7 +1,10 @@
 package import_export;
 
 import java.io.*;
-import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import words_handler.Dictionary;
 import words_handler.Word;
 
@@ -14,44 +17,40 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("../data/AnhViet.dict");
-            File ignore = new File("../data/remove.txt");
-            Scanner sc = new Scanner(input, "UTF-8");
-            Scanner igsc = new Scanner(ignore, "UTF-8");
+            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("../data/AnhViet.dict"), StandardCharsets.UTF_8));
 
             String target = "";
             String explain = "";
-            String tmp;
 
+            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("../data/remove.txt"), StandardCharsets.UTF_8));
             String ignoreContent = "";
-            while (igsc.hasNextLine()) {
-                ignoreContent += (igsc.nextLine() + "\n");
+
+            for (int i = 0; i < ignore.size(); ++i) {
+                ignoreContent += (ignore.get(i) + "\n");
             }
 
-            while (sc.hasNextLine()) {
-                tmp = sc.nextLine();
-                if (tmp.isEmpty()) {
+            for (String s : inputContent) {
+                if (s.isEmpty()) {
                     continue;
-                } else if (tmp.charAt(0) == '@') {
+                } else if (s.charAt(0) == '@') {
                     if (!target.equals("") && !explain.equals("")) {
                         if (!ignoreContent.contains(target) && !ignoreContent.contains(explain)) {
                             dict.addWord(new Word(target, explain));
                         }
                     }
 
-                    for (int i = 0; i < tmp.length(); ++i) {
-                        if (tmp.charAt(i) == '/') {
-                            target = tmp.substring(1, i - 1);
-                            explain = tmp.substring(i) + "\n"; // substring from i to end.
+                    for (int j = 0; j < s.length(); ++j) {
+                        if (s.charAt(j) == '/') {
+                            target = s.substring(1, j - 1);
+                            explain = s.substring(j) + "\n"; // substring from i to end.
                             break;
                         }
                     }
                 } else {
-                    explain += tmp + "\n";
+                    explain += s + "\n";
                 }
             }
             dict.addWord(new Word(target, explain));
-            sc.close();
         } catch (IOException e) {
             System.out.println("File not found");
         }
