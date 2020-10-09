@@ -1,11 +1,11 @@
-package import_export;
+package tiengviet2vn_dict.import_export;
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
-import words_handler.Dictionary;
-import words_handler.Word;
+import tiengviet2vn_dict.words_handler.Dictionary;
+import tiengviet2vn_dict.words_handler.Word;
 
 import com.google.cloud.translate.*;
 
