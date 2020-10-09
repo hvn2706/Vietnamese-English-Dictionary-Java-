@@ -8,3 +8,4 @@
 *.txt
 *.bat
 *.jar
+.gradle
