@@ -19,13 +19,12 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File sr = new File("./data/AnhViet.dict");
-            Scanner scr = new Scanner(sr, "UTF-8");
+            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("./data/AnhViet.dict"), StandardCharsets.UTF_8));
+
             String target = "";
             String explain = "";
 
-            File ig = new File("./data/remove.txt");
-            Scanner igsc = new Scanner(ig, "UTF-8");
+            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("./data/remove.txt"), StandardCharsets.UTF_8));
             String ignoreContent = "";
 
             while (igsc.hasNextLine()) {
@@ -67,10 +66,8 @@ public class DictionaryManagement {
 
     public void deleteFromFile(String target, String explain) {
         try {
-            BufferedWriter ignore = new BufferedWriter(
-                new OutputStreamWriter(
-                new FileOutputStream("./data/remove.txt", true), StandardCharsets.UTF_8));
-            ignore.append("\n@").append(target).append(" ").append(explain);
+            Writer ignore = new BufferedWriter(new FileWriter("./data/remove.txt", true));
+            ignore.append("\n\n@").append(target).append(" ").append(explain);
             dict.removeWord(target, explain);
             ignore.flush();
             ignore.close();

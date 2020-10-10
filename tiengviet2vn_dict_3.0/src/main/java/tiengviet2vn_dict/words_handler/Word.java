@@ -1,4 +1,4 @@
-package words_handler;
+package tiengviet2vn_dict.words_handler;
 
 public class Word {
     private String word_target;
