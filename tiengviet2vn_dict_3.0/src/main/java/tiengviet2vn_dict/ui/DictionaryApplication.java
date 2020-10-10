@@ -6,6 +6,10 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
@@ -21,7 +25,8 @@ public class DictionaryApplication {
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator", true); //sentence translation dialog
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
-	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // functional panel
+	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // word functional panel
+	private final JPanel dfcPanel = new JPanel(new GridLayout(1, 0)); // definition functional panel
 	private final JPanel wrdPanel = new JPanel(new GridLayout(0, 2));
 	private final JPanel defPanel = new JPanel(); // definition area
 	private final JPanel schPanel = new JPanel(); // searching area
@@ -32,9 +37,11 @@ public class DictionaryApplication {
 
 	private final JButton schButton = new JButton("Search");
 	private final JButton addButton = new JButton("Add word");
-	private final JButton delButton = new JButton("Remove word");
 	private final JButton strButton = new JButton("Sentence Translator");
 	private final JButton trsButton = new JButton("Translate");
+	private final JButton delButton = new JButton(); // delete word
+	private final JButton edtButton = new JButton(); // edit word
+	private final JButton ttsButton = new JButton(); // pronounce word
 
 	JTextField schwd = new JTextField("Word here");
 	JTextArea def = new JTextArea("Definition here");
@@ -115,7 +122,10 @@ public class DictionaryApplication {
 			public void insertUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
 				if(schwd.getText().isEmpty()) {
-					sgn_list = new String[0];
+					sgn_list = new String[mn.getDict().getLength()];
+					for (int i = 0; i < mn.getDict().getLength(); ++i) {
+						sgn_list[i] = mn.getDict().getWord(i).getWord_target();
+					}
 				}
 				sgn.setListData(sgn_list);
 				def.setText(cmd.dictionarySearchExact(schwd.getText(), mn.getDict()));
@@ -123,7 +133,10 @@ public class DictionaryApplication {
 			public void removeUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
 				if(schwd.getText().isEmpty()) {
-					sgn_list = new String[0];
+					sgn_list = new String[mn.getDict().getLength()];
+					for (int i = 0; i < mn.getDict().getLength(); ++i) {
+						sgn_list[i] = mn.getDict().getWord(i).getWord_target();
+					}
 				}
 				sgn.setListData(sgn_list);
 				def.setText(cmd.dictionarySearchExact(schwd.getText(), mn.getDict()));
@@ -246,11 +259,14 @@ public class DictionaryApplication {
 			mn.getDict().sortDictionary();
 
 			try {
-				Writer file = new BufferedWriter(new FileWriter("../data/AnhViet.dict", true));
+				BufferedWriter file = new BufferedWriter(
+					new OutputStreamWriter(
+					new FileOutputStream("./data/AnhViet.dict", true), StandardCharsets.UTF_8));
 
-				file.append("\n\n@" + targField.getText() + " ");
-				file.append(explain);
+				file.append("\n@" + targField.getText() + " ");
+				file.append(explain + "\n");
 
+				file.flush();
 				file.close();
 
 				targField.setText("");
@@ -266,6 +282,10 @@ public class DictionaryApplication {
 	 * Remove word feature.
 	 */
 	public void addDelFrame() {
+		ImageIcon icon = new ImageIcon("./icon/delete.png");
+		Image img = icon.getImage();
+		delButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+
 		delFrame.setSize(250, 75);
 		delFrame.setResizable(false);
 		delFrame.setLocationRelativeTo(null);
@@ -299,6 +319,8 @@ public class DictionaryApplication {
 			}
 			delFrame.dispose();
 		});
+
+		no.addActionListener(e -> delFrame.dispose());
 	}
 
 	public void addStrDialog() {
@@ -336,12 +358,26 @@ public class DictionaryApplication {
 		strPanel.add(trs, c);
 	}
 
+	public void addEditFrame() {
+		ImageIcon icon = new ImageIcon("./icon/edit.png");
+		Image img = icon.getImage();
+		edtButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
+	public void setTtsButton() {
+		ImageIcon icon = new ImageIcon("./icon/audio.png");
+		Image img = icon.getImage();
+		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
 	/**
 	 * Run the App with User Interface.
 	 */
 	public void runApplication() {
 		addAddFrame();
 		addDelFrame();
+		addEditFrame();
+		setTtsButton();
 		addStrDialog();
 
 		def.setLineWrap(true);
@@ -361,8 +397,10 @@ public class DictionaryApplication {
 		wrdPanel.add(schPanel);
 		wrdPanel.add(defPanel);
 		funPanel.add(addButton);
-		funPanel.add(delButton);
 		funPanel.add(strButton);
+		dfcPanel.add(ttsButton);
+		dfcPanel.add(edtButton);
+		dfcPanel.add(delButton);
 
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
@@ -372,7 +410,10 @@ public class DictionaryApplication {
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(2, 2, 2, 2);
 
-		GBCfill(c, 0, 0, 1, 1);
+		GBCfill(c, 0, 0, 0, 0);
+		defPanel.add(dfcPanel, c);
+
+		GBCfill(c, 0, 1, 1, 1);
 		defPanel.add(def_scroll, c);
 
 		GBCfill(c, 0, 0, 1, 1);
