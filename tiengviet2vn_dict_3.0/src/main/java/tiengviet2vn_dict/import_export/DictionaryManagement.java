@@ -1,12 +1,14 @@
-package import_export;
+package tiengviet2vn_dict.import_export;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import words_handler.Dictionary;
-import words_handler.Word;
+import java.util.Scanner;
+
+import tiengviet2vn_dict.words_handler.Dictionary;
+import tiengviet2vn_dict.words_handler.Word;
 
 public class DictionaryManagement {
     private final Dictionary dict = new Dictionary();
@@ -25,11 +27,13 @@ public class DictionaryManagement {
             ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("./data/remove.txt"), StandardCharsets.UTF_8));
             String ignoreContent = "";
 
-            for (int i = 0; i < ignore.size(); ++i) {
-                ignoreContent += (ignore.get(i) + "\n");
+            while (igsc.hasNextLine()) {
+                ignoreContent += igsc.nextLine() + "\n";
             }
 
-            for (String s : inputContent) {
+            String s;
+            while (scr.hasNextLine()) {
+                s = scr.nextLine();
                 if (s.isEmpty()) {
                     continue;
                 } else if (s.charAt(0) == '@') {
@@ -50,7 +54,11 @@ public class DictionaryManagement {
                     explain += s + "\n";
                 }
             }
-            dict.addWord(new Word(target, explain));
+            if (!ignoreContent.contains(target) && !ignoreContent.contains(explain)) {
+                dict.addWord(new Word(target, explain));
+            }
+            scr.close();
+            igsc.close();
         } catch (IOException e) {
             System.out.println("File not found");
         }
@@ -61,9 +69,10 @@ public class DictionaryManagement {
             Writer ignore = new BufferedWriter(new FileWriter("./data/remove.txt", true));
             ignore.append("\n\n@").append(target).append(" ").append(explain);
             dict.removeWord(target, explain);
+            ignore.flush();
             ignore.close();
         } catch (Exception ev) {
-            System.out.println("No path found!");
+            System.out.println("No path found in management!");
         }
     }
 }

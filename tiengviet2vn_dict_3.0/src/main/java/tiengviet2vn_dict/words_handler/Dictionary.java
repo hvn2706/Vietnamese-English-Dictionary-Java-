@@ -1,4 +1,4 @@
-package words_handler;
+package tiengviet2vn_dict.words_handler;
 
 import java.util.ArrayList;
 import java.util.Collections;
