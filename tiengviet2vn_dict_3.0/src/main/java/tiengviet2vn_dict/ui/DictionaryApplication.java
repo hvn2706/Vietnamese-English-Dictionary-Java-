@@ -1,14 +1,11 @@
 package tiengviet2vn_dict.ui;
 
 import java.awt.event.*;
-import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Paths;
 
 import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
@@ -38,11 +35,11 @@ public class DictionaryApplication {
 	private final JButton addButton = new JButton("Add word");
 	private final JButton strButton = new JButton("Sentence Translator");
 	private final JButton trsButton = new JButton("Translate");
-	private JButton delButton; // delete word
-	private JButton edtButton; // edit word
-	private JButton ttsButton; // pronounce word
+	private final JButton delButton = new JButton(); // delete word
+	private final JButton edtButton = new JButton(); // edit word
+	private final JButton ttsButton = new JButton(); // pronounce word
 
-	JTextField schwd = new JTextField();
+	JTextField schwd = new JTextField("Word here");
 	JTextArea def = new JTextArea("Definition here");
 	JTextArea sntce = new JTextArea("Sentence here");
 	JTextArea trs = new JTextArea("Translated sentence here");
@@ -120,7 +117,7 @@ public class DictionaryApplication {
 			}
 			public void insertUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
-				if(schwd.getText().equals("")) {
+				if(schwd.getText().isEmpty()) {
 					sgn_list = new String[mn.getDict().getLength()];
 					for (int i = 0; i < mn.getDict().getLength(); ++i) {
 						sgn_list[i] = mn.getDict().getWord(i).getWord_target();
@@ -131,7 +128,7 @@ public class DictionaryApplication {
 			}
 			public void removeUpdate(DocumentEvent e) {
 				String[] sgn_list = cmd.dictionarySearchSamePrefix(schwd.getText(), mn.getDict());
-				if(schwd.getText().equals("")) {
+				if(schwd.getText().isEmpty()) {
 					sgn_list = new String[mn.getDict().getLength()];
 					for (int i = 0; i < mn.getDict().getLength(); ++i) {
 						sgn_list[i] = mn.getDict().getWord(i).getWord_target();
@@ -278,15 +275,9 @@ public class DictionaryApplication {
 	 * Remove word feature.
 	 */
 	public void addDelFrame() {
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File("./data/delete.png"));
-		} catch (Exception e) {
-			System.out.println("No pic found!");
-			return;
-		}
-		ImageIcon icon = new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-		delButton = new JButton(icon);
+		ImageIcon icon = new ImageIcon("./icon/delete.png");
+		Image img = icon.getImage();
+		delButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 
 		delFrame.setSize(250, 75);
 		delFrame.setResizable(false);
@@ -361,27 +352,15 @@ public class DictionaryApplication {
 	}
 
 	public void addEditFrame() {
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File("./data/edit.png"));
-		} catch (Exception e) {
-			System.out.println("No pic found!");
-			return;
-		}
-		ImageIcon icon = new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-		edtButton = new JButton(icon);
+		ImageIcon icon = new ImageIcon("./icon/edit.png");
+		Image img = icon.getImage();
+		edtButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 	}
 
 	public void setTtsButton() {
-		BufferedImage img;
-		try {
-			img = ImageIO.read(new File("./data/audio.png"));
-		} catch (Exception e) {
-			System.out.println("No pic found!");
-			return;
-		}
-		ImageIcon icon = new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
-		ttsButton = new JButton(icon);
+		ImageIcon icon = new ImageIcon("./icon/audio.png");
+		Image img = icon.getImage();
+		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 	}
 
 	/**

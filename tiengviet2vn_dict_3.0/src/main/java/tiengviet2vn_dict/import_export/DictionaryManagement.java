@@ -1,10 +1,8 @@
 package tiengviet2vn_dict.import_export;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Scanner;
+
 import tiengviet2vn_dict.words_handler.Dictionary;
 import tiengviet2vn_dict.words_handler.Word;
 
@@ -17,18 +15,22 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            ArrayList<String> inputContent = new ArrayList<>(Files.readAllLines(Paths.get("./data/AnhViet.dict"), StandardCharsets.UTF_8));
+            File sr = new File("./data/AnhViet.dict");
+            Scanner scr = new Scanner(sr, "UTF-8");
             String target = "";
             String explain = "";
 
-            ArrayList<String> ignore = new ArrayList<>(Files.readAllLines(Paths.get("./data/remove.txt"), StandardCharsets.UTF_8));
+            File ig = new File("./data/remove.txt");
+            Scanner igsc = new Scanner(ig, "UTF-8");
             String ignoreContent = "";
 
-            for (int i = 0; i < ignore.size(); ++i) {
-                ignoreContent += (ignore.get(i) + "\n");
+            while (igsc.hasNextLine()) {
+                ignoreContent += igsc.nextLine();
             }
 
-            for (String s : inputContent) {
+            String s;
+            while (scr.hasNextLine()) {
+                s = scr.nextLine();
                 if (s.isEmpty()) {
                     continue;
                 } else if (s.charAt(0) == '@') {
@@ -50,6 +52,8 @@ public class DictionaryManagement {
                 }
             }
             dict.addWord(new Word(target, explain));
+            scr.close();
+            igsc.close();
         } catch (IOException e) {
             System.out.println("File not found");
         }
