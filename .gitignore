@@ -1,6 +1,7 @@
 .idea
 /out
 *.dict
+*.png
 *.class
 *.html
 *.xml
@@ -8,3 +9,4 @@
 *.txt
 *.bat
 *.jar
+.gradle

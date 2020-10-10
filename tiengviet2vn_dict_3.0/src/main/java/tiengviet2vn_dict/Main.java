@@ -1,8 +1,8 @@
 package tiengviet2vn_dict;
 
-import import_export.DictionaryCommandline;
-import import_export.DictionaryManagement;
-import ui.DictionaryApplication;
+import tiengviet2vn_dict.import_export.DictionaryCommandline;
+import tiengviet2vn_dict.import_export.DictionaryManagement;
+import tiengviet2vn_dict.ui.DictionaryApplication;
 
 import com.google.cloud.translate.*;
 
