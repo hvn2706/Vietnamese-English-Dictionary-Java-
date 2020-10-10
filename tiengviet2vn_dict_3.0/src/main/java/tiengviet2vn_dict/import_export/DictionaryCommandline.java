@@ -90,6 +90,39 @@ public class DictionaryCommandline {
                 translate.detect(sentence).getLanguage()),
             Translate.TranslateOption.targetLanguage("vi")
         );
+        try {
+            speak(translation.getTranslatedText(), "vi");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return translation.getTranslatedText();
+    }
+
+    public static void speak(String sentence, String langCode) throws Exception {
+        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+            SynthesisInput input = SynthesisInput.newBuilder().setText(sentence).build();
+            
+            VoiceSelectionParams voice = VoiceSelectionParams
+            .newBuilder()
+            .setLanguageCode(langCode)
+            .setSsmlGender(SsmlVoiceGender.NEUTRAL)
+            .build();
+            
+            AudioConfig audioConfig = AudioConfig
+            .newBuilder()
+            .setAudioEncoding(AudioEncoding.LINEAR16)
+            .build();
+
+            SynthesizeSpeechResponse response = textToSpeechClient
+            .synthesizeSpeech(input, voice, audioConfig);
+
+            InputStream stream = new ByteArrayInputStream(response.getAudioContent().toByteArray());
+            AudioInputStream sound = AudioSystem.getAudioInputStream(stream);
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(sound);
+            clip.start();
+        }
     }
 }
