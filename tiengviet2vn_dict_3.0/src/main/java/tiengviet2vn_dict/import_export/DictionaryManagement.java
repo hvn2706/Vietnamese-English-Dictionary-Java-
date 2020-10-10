@@ -1,6 +1,10 @@
 package tiengviet2vn_dict.import_export;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 import tiengviet2vn_dict.words_handler.Dictionary;
@@ -25,7 +29,7 @@ public class DictionaryManagement {
             String ignoreContent = "";
 
             while (igsc.hasNextLine()) {
-                ignoreContent += igsc.nextLine();
+                ignoreContent += igsc.nextLine() + "\n";
             }
 
             String s;
@@ -51,7 +55,9 @@ public class DictionaryManagement {
                     explain += s + "\n";
                 }
             }
-            dict.addWord(new Word(target, explain));
+            if (!ignoreContent.contains(target) && !ignoreContent.contains(explain)) {
+                dict.addWord(new Word(target, explain));
+            }
             scr.close();
             igsc.close();
         } catch (IOException e) {
@@ -61,9 +67,12 @@ public class DictionaryManagement {
 
     public void deleteFromFile(String target, String explain) {
         try {
-            Writer ignore = new BufferedWriter(new FileWriter("./data/remove.txt", true));
-            ignore.append("\n\n@").append(target).append(" ").append(explain);
+            BufferedWriter ignore = new BufferedWriter(
+                new OutputStreamWriter(
+                new FileOutputStream("./data/remove.txt", true), StandardCharsets.UTF_8));
+            ignore.append("\n@").append(target).append(" ").append(explain);
             dict.removeWord(target, explain);
+            ignore.flush();
             ignore.close();
         } catch (Exception ev) {
             System.out.println("No path found in management!");

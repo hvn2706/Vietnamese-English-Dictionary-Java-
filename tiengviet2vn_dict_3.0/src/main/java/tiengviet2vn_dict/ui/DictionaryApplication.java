@@ -6,6 +6,10 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
@@ -255,11 +259,14 @@ public class DictionaryApplication {
 			mn.getDict().sortDictionary();
 
 			try {
-				Writer file = new BufferedWriter(new FileWriter("./data/AnhViet.dict", true));
+				BufferedWriter file = new BufferedWriter(
+					new OutputStreamWriter(
+					new FileOutputStream("./data/AnhViet.dict", true), StandardCharsets.UTF_8));
 
-				file.append("\n\n@" + targField.getText() + " ");
-				file.append(explain);
+				file.append("\n@" + targField.getText() + " ");
+				file.append(explain + "\n");
 
+				file.flush();
 				file.close();
 
 				targField.setText("");
