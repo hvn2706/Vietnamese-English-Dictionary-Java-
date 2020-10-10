@@ -1,17 +1,13 @@
 package tiengviet2vn_dict.import_export;
 
-import java.util.*;
 import java.net.*;
 import java.io.*;
-
-import javax.sound.sampled.*;
+import java.util.*;
 
 import tiengviet2vn_dict.words_handler.Dictionary;
 import tiengviet2vn_dict.words_handler.Word;
 
 import com.google.cloud.translate.*;
-import com.google.protobuf.ByteString;
-import com.google.cloud.texttospeech.v1.*;
 
 public class DictionaryCommandline {
     /**
