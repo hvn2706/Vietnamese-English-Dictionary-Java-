@@ -62,7 +62,7 @@ public class DictionaryManagement {
             dict.removeWord(target, explain);
             ignore.close();
         } catch (Exception ev) {
-            System.out.println("No path found!");
+            System.out.println("No path found in management!");
         }
     }
 }
