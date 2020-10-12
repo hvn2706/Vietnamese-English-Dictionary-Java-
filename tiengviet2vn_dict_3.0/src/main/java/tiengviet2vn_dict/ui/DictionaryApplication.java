@@ -25,7 +25,7 @@ public class DictionaryApplication {
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator", true); //sentence translation dialog
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
-	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // word functional panel
+	private final JPanel funPanel = new JPanel(new GridLayout(1, 0, 5, 0)); // word functional panel
 	private final JPanel dfcPanel = new JPanel(new GridLayout(1, 0)); // definition functional panel
 	private final JPanel wrdPanel = new JPanel(new GridLayout(0, 2));
 	private final JPanel defPanel = new JPanel(); // definition area
@@ -42,6 +42,7 @@ public class DictionaryApplication {
 	private final JButton delButton = new JButton(); // delete word
 	private final JButton edtButton = new JButton(); // edit word
 	private final JButton ttsButton = new JButton(); // pronounce word
+	private final JButton stsButton = new JButton(); // pronounce sentence
 
 	JTextField schwd = new JTextField("Word here");
 	JTextArea def = new JTextArea("Definition here");
@@ -75,6 +76,15 @@ public class DictionaryApplication {
 		c.gridy = gy;
 		c.weightx = wx;
 		c.weighty = wy;
+	}
+
+	/**
+	 * Make a button flat
+	 */
+	public void makeFlat(JButton b) {
+		b.setBackground(new Color(188, 188, 188));
+		b.setFocusPainted(false);
+		b.setBorderPainted(false);
 	}
 
 	/**
@@ -282,9 +292,7 @@ public class DictionaryApplication {
 	 * Remove word feature.
 	 */
 	public void addDelFrame() {
-		ImageIcon icon = new ImageIcon("./icon/delete.png");
-		Image img = icon.getImage();
-		delButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		setDelButton(delButton);
 
 		delFrame.setSize(250, 75);
 		delFrame.setResizable(false);
@@ -358,16 +366,34 @@ public class DictionaryApplication {
 		strPanel.add(trs, c);
 	}
 
-	public void addEditFrame() {
-		ImageIcon icon = new ImageIcon("./icon/edit.png");
-		Image img = icon.getImage();
-		edtButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
-	}
-
-	public void setTtsButton() {
+	/**
+	 * Add audio icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setAudioButton(JButton b) {
 		ImageIcon icon = new ImageIcon("./icon/audio.png");
 		Image img = icon.getImage();
-		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
+	/**
+	 * Add edit icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setEditButton(JButton b) {
+		ImageIcon icon = new ImageIcon("./icon/edit.png");
+		Image img = icon.getImage();
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
+	/**
+	 * Add delete icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setDelButton(JButton b) {
+		ImageIcon icon = new ImageIcon("./icon/delete.png");
+		Image img = icon.getImage();
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 	}
 
 	/**
@@ -376,9 +402,10 @@ public class DictionaryApplication {
 	public void runApplication() {
 		addAddFrame();
 		addDelFrame();
-		addEditFrame();
-		setTtsButton();
 		addStrDialog();
+
+		setEditButton(edtButton);
+		setAudioButton(ttsButton);
 
 		def.setLineWrap(true);
 		def.setWrapStyleWord(true);
@@ -401,6 +428,12 @@ public class DictionaryApplication {
 		dfcPanel.add(ttsButton);
 		dfcPanel.add(edtButton);
 		dfcPanel.add(delButton);
+
+		makeFlat(ttsButton);
+		makeFlat(edtButton);
+		makeFlat(delButton);
+		makeFlat(strButton);
+		makeFlat(addButton);
 
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
