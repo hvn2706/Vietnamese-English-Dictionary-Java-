@@ -86,21 +86,17 @@ public class DictionaryManagement {
 
     public void addToFile(String target, String explain) {
         inputContent.add("");
-        inputContent.add("@" + target + " " + explain);
-        String tmp = explain;
+        String fullWord = "@" + target + " " + explain;
         String adding = "";
-        for (int i = 0; i < tmp.length(); ++i) {
-            if (tmp.charAt(i) == '\n') {
+        for (int i = 0; i < fullWord.length(); ++i) {
+            if (fullWord.charAt(i) == '\n') {
                 inputContent.add(adding);
                 adding = "";
             } else {
-                adding += tmp.charAt(i);
-            }
-
-            if (i == tmp.length() - 1) {
-                inputContent.add(adding);
+                adding += fullWord.charAt(i);
             }
         }
+
         dict.sortDictionary();
 
         try {
@@ -109,7 +105,7 @@ public class DictionaryManagement {
                 new FileOutputStream("./data/AnhViet.dict", true), StandardCharsets.UTF_8));
 
             file.append("\n@").append(target).append(" ");
-            file.append(explain + "\n");
+            file.append(explain);
 
             file.flush();
             file.close();
@@ -151,6 +147,14 @@ public class DictionaryManagement {
             }
             if (tmp_target.equals(target) && tmp_explain.equals(explain)) {
                 ignore.append(Integer.toString(start)).append("\n");
+            }
+            if (tmp_target.equals(target)) {
+                System.out.print("this" + tmp_explain);
+                System.out.print(explain + "hello");
+                /*System.out.println(inputContent.get(inputContent.size() - 4));
+                System.out.println(inputContent.get(inputContent.size() - 3));
+                System.out.println(inputContent.get(inputContent.size() - 2));
+                System.out.println(inputContent.get(inputContent.size() - 1));*/
             }
 
             dict.removeWord(target, explain);
