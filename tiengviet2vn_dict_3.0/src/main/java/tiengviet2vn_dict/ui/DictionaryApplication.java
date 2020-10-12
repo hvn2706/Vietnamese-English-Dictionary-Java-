@@ -422,7 +422,7 @@ public class DictionaryApplication {
 		});
 	}
 
-	public void setTtsButton() {
+	public void setTtsButton() { //need to be updated from goku's code
 		ImageIcon icon = new ImageIcon("./icon/audio.png");
 		Image img = icon.getImage();
 		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
@@ -444,7 +444,7 @@ public class DictionaryApplication {
 		addAddFrame();
 		addDelFrame();
 		addEditFrame();
-		setTtsButton();
+		setTtsButton(); // need to be updated from goku's code
 		addStrDialog();
 
 		ImageIcon icon = new ImageIcon("./icon/find.png");
