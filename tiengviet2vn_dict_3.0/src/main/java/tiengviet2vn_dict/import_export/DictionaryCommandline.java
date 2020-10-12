@@ -1,6 +1,5 @@
 package tiengviet2vn_dict.import_export;
 
-import java.net.*;
 import java.io.*;
 import java.util.*;
 import javax.sound.sampled.*;
@@ -81,7 +80,7 @@ public class DictionaryCommandline {
      * @param sentence The sentence to be translated
      * @return Translated sentence
      */
-    public static String sentenceTranslator(String sentence) {
+    public String sentenceTranslator(String sentence) {
         if(sentence.isEmpty()) {
             return "";
         }
@@ -101,7 +100,7 @@ public class DictionaryCommandline {
         return translation.getTranslatedText();
     }
 
-    public static void speak(String sentence, String langCode) throws Exception {
+    public void speak(String sentence, String langCode) throws Exception {
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
             SynthesisInput input = SynthesisInput.newBuilder().setText(sentence).build();
             
