@@ -5,11 +5,6 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
@@ -22,6 +17,7 @@ public class DictionaryApplication {
 	private final JFrame appFrame = new JFrame("tiengviet2vn_dict_3.0");
 	private final JDialog addFrame = new JDialog(appFrame, "Add word.", true); // add word window.
 	private final JDialog delFrame = new JDialog(appFrame, "Confirm.", true); // remove word window.
+	private final JDialog edtFrame = new JDialog(appFrame, "Edit word", true); // editing frame
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator", true); //sentence translation dialog
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
@@ -35,13 +31,14 @@ public class DictionaryApplication {
 	private final JPanel strPanel = new JPanel(); // sentence to be translated panel
 	private final JPanel trsPanel = new JPanel(); // translated sentence panel
 
-	private final JButton schButton = new JButton("Search");
 	private final JButton addButton = new JButton("Add word");
 	private final JButton strButton = new JButton("Sentence Translator");
 	private final JButton trsButton = new JButton("Translate");
 	private final JButton delButton = new JButton(); // delete word
 	private final JButton edtButton = new JButton(); // edit word
 	private final JButton ttsButton = new JButton(); // pronounce word
+
+	private final JLabel editTarget = new JLabel(" Word: ");
 
 	JTextField schwd = new JTextField("Word here");
 	JTextArea def = new JTextArea("Definition here");
@@ -91,27 +88,28 @@ public class DictionaryApplication {
 			public void actionPerformed(ActionEvent e) {
 				if (sgn.getSelectedValue() == null) {
 					JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
-					return;
-				}
-				else delFrame.setVisible(true);
+				} else delFrame.setVisible(true);
+			}
+		});
+
+		edtButton.addActionListener(e -> {
+			if (sgn.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
+			} else {
+				editTarget.setText(" " + sgn.getSelectedValue());
+				edtFrame.setVisible(true);
 			}
 		});
 
 		trsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trs.setText(DictionaryCommandline.sentenceTranslator(sntce.getText()));
+				trs.setText(cmd.sentenceTranslator(sntce.getText()));
 			}
 		});
 
 		strButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				strDialog.setVisible(true);
-			}
-		});
-
-		schButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				def.setText(DictionaryCommandline.sentenceTranslator(schwd.getText()));
 			}
 		});
 
@@ -256,25 +254,10 @@ public class DictionaryApplication {
 			}
 
 			mn.getDict().addWord(word);
-			mn.getDict().sortDictionary();
-
-			try {
-				BufferedWriter file = new BufferedWriter(
-					new OutputStreamWriter(
-					new FileOutputStream("./data/AnhViet.dict", true), StandardCharsets.UTF_8));
-
-				file.append("\n@" + targField.getText() + " ");
-				file.append(explain + "\n");
-
-				file.flush();
-				file.close();
-
-				targField.setText("");
-				pronField.setText("");
-				explField.setText("");
-			} catch (Exception ev) {
-				System.out.println("No path found!");
-			}
+			mn.addToFile(target, explain);
+			targField.setText("");
+			pronField.setText("");
+			explField.setText("");
 		});
 	}
 
@@ -362,12 +345,96 @@ public class DictionaryApplication {
 		ImageIcon icon = new ImageIcon("./icon/edit.png");
 		Image img = icon.getImage();
 		edtButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+
+		edtFrame.setSize(300, 300);
+		edtFrame.setLocationRelativeTo(null);
+		edtFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+		JPanel mainPanel = new JPanel(new GridBagLayout());
+		JPanel pronPanel = new JPanel(new GridLayout(2, 0));
+		JPanel explPanel = new JPanel(new GridBagLayout());
+
+		JLabel pron = new JLabel(" Pronunciation: ");
+		JLabel expl = new JLabel(" Definition:");
+
+		JTextField pronField = new JTextField();
+		JTextArea explField = new JTextArea();
+
+		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		explField.setBorder(loweredbevel);
+		explField.setLineWrap(true);
+		explField.setWrapStyleWord(true);
+
+		JButton finishUpdate = new JButton("Update");
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+
+		GBCfill(c, 0, 3, 0, 0);
+		mainPanel.add(finishUpdate, c);
+
+		GBCfill(c, 0, 0, 1, 0);
+		mainPanel.add(editTarget, c);
+
+		pronPanel.add(pron);
+		pronPanel.add(pronField);
+
+		GBCfill(c, 0, 1, 1, 0);
+		mainPanel.add(pronPanel, c);
+
+		GBCfill(c, 0, 0, 1, 0);
+		explPanel.add(expl, c);
+
+		GBCfill(c, 0, 1, 1, 1);
+		explPanel.add(explField, c);
+
+		GBCfill(c, 0, 2, 1, 1);
+		mainPanel.add(explPanel, c);
+
+		edtFrame.add(mainPanel);
+
+		pronField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					explField.requestFocus();
+				}
+			}
+		});
+
+		finishUpdate.addActionListener(e -> {
+			if (explField.getText().length() == 0 && pronField.getText().length() == 0) {
+				return;
+			}
+
+			String explain = "/" + pronField.getText() + "/\n" + explField.getText();
+			int index = -1;
+			for (int i = 0; i < mn.getDict().getLength(); ++i) {
+				if (mn.getDict().getWord(i).getWord_target().equals(sgn.getSelectedValue())) {
+					index = i;
+					break;
+				}
+			}
+			mn.getDict().getWord(index).setWord_explain(explain);
+			mn.editFromFile(sgn.getSelectedValue(), def.getText(), explain);
+			pronField.setText("");
+			explField.setText("");
+		});
 	}
 
 	public void setTtsButton() {
 		ImageIcon icon = new ImageIcon("./icon/audio.png");
 		Image img = icon.getImage();
 		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		ttsButton.addActionListener(e -> {
+		    try {
+		    	if (sgn.getSelectedValue() != null) {
+		    		cmd.speak(sgn.getSelectedValue(), "en");
+				}
+			} catch (Exception ev) {
+		    	ev.printStackTrace();
+			}
+        });
 	}
 
 	/**
@@ -380,6 +447,11 @@ public class DictionaryApplication {
 		setTtsButton();
 		addStrDialog();
 
+		ImageIcon icon = new ImageIcon("./icon/find.png");
+		Image img = icon.getImage();
+		icon = new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+		JLabel findLabel = new JLabel(icon, JLabel.CENTER);
+
 		def.setLineWrap(true);
 		def.setWrapStyleWord(true);
 		GridBagConstraints c = new GridBagConstraints();
@@ -387,7 +459,7 @@ public class DictionaryApplication {
 
 		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		def_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		schwd.setBorder(loweredbevel);
+		//schwd.setBorder(loweredbevel);
 		sgn.setBorder(loweredbevel);
 		def.setBorder(loweredbevel);
 		def.setEditable(false);
@@ -420,7 +492,7 @@ public class DictionaryApplication {
 		sbrPanel.add(schwd, c);
 
 		GBCfill(c, 1, 0, 0, 1);
-		sbrPanel.add(schButton, c);
+		sbrPanel.add(findLabel, c);
 
 		GBCfill(c, 0, 0, 1, 0);
 		schPanel.add(sbrPanel, c);
