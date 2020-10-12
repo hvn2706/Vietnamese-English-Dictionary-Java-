@@ -166,6 +166,14 @@ public class DictionaryManagement {
     }
 
     public void editFromFile(String target, String explain, String editExplain) {
+        for (int i = editExplain.length() - 1; i >= 0; --i) {
+            if (editExplain.charAt(i) == '\n') {
+                editExplain = editExplain.substring(0, editExplain.length() - 1);
+            } else {
+                break;
+            }
+        }
+        editExplain+="\n";
         deleteFromFile(target, explain);
         addToFile(target, editExplain);
     }
