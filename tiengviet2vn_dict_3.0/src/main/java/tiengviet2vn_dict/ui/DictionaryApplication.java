@@ -257,6 +257,14 @@ public class DictionaryApplication {
 
 			String target = targField.getText();
 			String explain = "/" + pronField.getText() + "/\n" + explField.getText();
+			for (int i = explain.length() - 1; i >= 0; --i) {
+				if (explain.charAt(i) == '\n') {
+					explain = explain.substring(0, explain.length() - 1);
+				} else {
+					break;
+				}
+			}
+			explain+="\n";
 
 			Word word = new Word(target, explain);
 
