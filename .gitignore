@@ -5,5 +5,5 @@
 *.html
 *.xml
 *.iml
-*.bat
 *.jar
+gradlew.bat
