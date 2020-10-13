@@ -21,8 +21,8 @@ public class DictionaryApplication {
 	private final JDialog strDialog = new JDialog(appFrame, "Sentence Translator", true); //sentence translation dialog
 
 	private final JPanel appPanel = new JPanel(new GridBagLayout()); // main panel.
-	private final JPanel funPanel = new JPanel(new GridLayout(1, 0)); // word functional panel
-	private final JPanel dfcPanel = new JPanel(new GridLayout(1, 0)); // definition functional panel
+	private final JPanel funPanel = new JPanel(new GridLayout(1, 0, 5, 0)); // word functional panel
+	private final JPanel dfcPanel = new JPanel(new GridLayout(1, 0, 5, 0)); // definition functional panel
 	private final JPanel wrdPanel = new JPanel(new GridLayout(0, 2));
 	private final JPanel defPanel = new JPanel(); // definition area
 	private final JPanel schPanel = new JPanel(); // searching area
@@ -30,6 +30,8 @@ public class DictionaryApplication {
 	private final JPanel sgnPanel = new JPanel(); // suggestion area
 	private final JPanel strPanel = new JPanel(); // sentence to be translated panel
 	private final JPanel trsPanel = new JPanel(); // translated sentence panel
+	private final JPanel trsPanelVi = new JPanel(); // translated sentence panel
+	private final JPanel trsPanelEn = new JPanel(); // translated sentence panel
 
 	private final JButton addButton = new JButton("Add word");
 	private final JButton strButton = new JButton("Sentence Translator");
@@ -37,6 +39,8 @@ public class DictionaryApplication {
 	private final JButton delButton = new JButton(); // delete word
 	private final JButton edtButton = new JButton(); // edit word
 	private final JButton ttsButton = new JButton(); // pronounce word
+	private final JButton stsButtonEn = new JButton(); // pronounce sentence
+	private final JButton stsButtonVi = new JButton(); // pronounce sentence
 
 	private final JLabel editTarget = new JLabel(" Word: ");
 
@@ -72,6 +76,19 @@ public class DictionaryApplication {
 		c.gridy = gy;
 		c.weightx = wx;
 		c.weighty = wy;
+	}
+
+	/**
+	 * Make a button flat
+	 */
+	public void makeFlat(JButton b) {
+		b.setBackground(new Color(188, 188, 188));
+		b.setFocusPainted(false);
+		// b.setBorderPainted(false);
+	}
+
+	public void addBorder(JTextArea tA) {
+		tA.setBorder(BorderFactory.createLineBorder(new Color(127, 138, 148)));
 	}
 
 	/**
@@ -155,127 +172,125 @@ public class DictionaryApplication {
 	 * Add word feature
 	 */
 	public void addAddFrame() {
-		addFrame.setSize(300, 300);
-		addFrame.setLocationRelativeTo(null);
-		addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        addFrame.setSize(300, 300);
+        addFrame.setLocationRelativeTo(null);
+        addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-		JPanel mainPanel = new JPanel(new GridBagLayout());
-		JPanel targPanel = new JPanel(new GridLayout(2, 0));
-		JPanel pronPanel = new JPanel(new GridLayout(2, 0));
-		JPanel explPanel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        JPanel targPanel = new JPanel(new GridLayout(2, 0));
+        JPanel pronPanel = new JPanel(new GridLayout(2, 0));
+        JPanel explPanel = new JPanel(new GridBagLayout());
 
-		JLabel targ = new JLabel(" New Word:");
-		JLabel pron = new JLabel(" Pronunciation: ");
-		JLabel expl = new JLabel(" Definition:");
+        JLabel targ = new JLabel(" New Word:");
+        JLabel pron = new JLabel(" Pronunciation: ");
+        JLabel expl = new JLabel(" Definition:");
 
-		JTextField targField = new JTextField();
-		JTextField pronField = new JTextField();
-		JTextArea explField = new JTextArea();
+        JTextField targField = new JTextField();
+        JTextField pronField = new JTextField();
+        JTextArea explField = new JTextArea();
 
-		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-		explField.setBorder(loweredbevel);
-		explField.setLineWrap(true);
-		explField.setWrapStyleWord(true);
+        addBorder(explField);
+        explField.setLineWrap(true);
+        explField.setWrapStyleWord(true);
 
-		JButton finishAdd = new JButton("Add");
+        JButton finishAdd = new JButton("Add");
+        makeFlat(finishAdd);
 
-		targPanel.add(targ);
-		targPanel.add(targField);
+        targPanel.add(targ);
+        targPanel.add(targField);
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
 
-		GBCfill(c, 0, 3, 0, 0);
-		mainPanel.add(finishAdd, c);
+        GBCfill(c, 0, 3, 0, 0);
+        mainPanel.add(finishAdd, c);
 
-		GBCfill(c, 0, 1, 1, 1);
-		targPanel.add(targField, c);
+        GBCfill(c, 0, 1, 1, 1);
+        targPanel.add(targField, c);
 
-		GBCfill(c, 0, 0, 1, 0);
-		mainPanel.add(targPanel, c);
+        GBCfill(c, 0, 0, 1, 0);
+        mainPanel.add(targPanel, c);
 
-		pronPanel.add(pron);
-		pronPanel.add(pronField);
+        pronPanel.add(pron);
+        pronPanel.add(pronField);
 
-		GBCfill(c, 0, 1, 1, 0);
-		mainPanel.add(pronPanel, c);
+        GBCfill(c, 0, 1, 1, 0);
+        mainPanel.add(pronPanel, c);
 
-		GBCfill(c, 0, 0, 1, 0);
-		explPanel.add(expl, c);
+        GBCfill(c, 0, 0, 1, 0);
+        explPanel.add(expl, c);
 
-		GBCfill(c, 0, 1, 1, 1);
-		explPanel.add(explField, c);
+        GBCfill(c, 0, 1, 1, 1);
+        explPanel.add(explField, c);
 
-		GBCfill(c, 0, 2, 1, 1);
-		mainPanel.add(explPanel, c);
+        GBCfill(c, 0, 2, 1, 1);
+        mainPanel.add(explPanel, c);
 
-		addFrame.add(mainPanel);
+        addFrame.add(mainPanel);
 
-		targField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					pronField.requestFocus();
-				}
-			}
-		});
+        targField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    pronField.requestFocus();
+                }
+            }
+        });
 
-		pronField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					explField.requestFocus();
-				}
-			}
-		});
+        pronField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    explField.requestFocus();
+                }
+            }
+        });
 
-		finishAdd.addActionListener(e -> {
-			if (targField.getText().length() == 0) {
-				return;
-			}
+        finishAdd.addActionListener(e -> {
+            if (targField.getText().length() == 0) {
+                return;
+            }
 
-			if (targField.getText().contains("@")) {
-				JOptionPane.showMessageDialog(addFrame, "Must not contain '@' character!");
-				return;
-			}
+            if (targField.getText().contains("@")) {
+                JOptionPane.showMessageDialog(addFrame, "Must not contain '@' character!");
+                return;
+            }
 
-			if (explField.getText().length() == 0 && pronField.getText().length() == 0) {
-				return;
-			}
+            if (explField.getText().length() == 0 && pronField.getText().length() == 0) {
+                return;
+            }
 
-			String target = targField.getText();
-			String explain = "/" + pronField.getText() + "/\n" + explField.getText();
-			for (int i = explain.length() - 1; i >= 0; --i) {
-				if (explain.charAt(i) == '\n') {
-					explain = explain.substring(0, explain.length() - 1);
-				} else {
-					break;
-				}
-			}
-			explain+="\n";
+            String target = targField.getText();
+            String explain = "/" + pronField.getText() + "/\n" + explField.getText();
+            for (int i = explain.length() - 1; i >= 0; --i) {
+                if (explain.charAt(i) == '\n') {
+                    explain = explain.substring(0, explain.length() - 1);
+                } else {
+                    break;
+                }
+            }
+            explain+="\n";
 
-			Word word = new Word(target, explain);
+            Word word = new Word(target, explain);
 
-			if (mn.getDict().existed(word)) {
-				JOptionPane.showMessageDialog(addFrame, "This word is already existed!");
-				return;
-			}
+            if (mn.getDict().existed(word)) {
+                JOptionPane.showMessageDialog(addFrame, "This word is already existed!");
+                return;
+            }
 
-			mn.getDict().addWord(word);
-			mn.addToFile(target, explain);
-			targField.setText("");
-			pronField.setText("");
-			explField.setText("");
-		});
-	}
+            mn.getDict().addWord(word);
+            mn.addToFile(target, explain);
+            targField.setText("");
+            pronField.setText("");
+            explField.setText("");
+        });
+    }
 
 	/**
 	 * Remove word feature.
 	 */
 	public void addDelFrame() {
-		ImageIcon icon = new ImageIcon("./icon/delete.png");
-		Image img = icon.getImage();
-		delButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		setDelButton(delButton);
 
 		delFrame.setSize(250, 75);
 		delFrame.setResizable(false);
@@ -315,44 +330,110 @@ public class DictionaryApplication {
 	}
 
 	public void addStrDialog() {
-		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-
 		strDialog.setSize(350, 200);
 		strDialog.setLocationRelativeTo(null);
 		strDialog.add(strPanel);
 
 		strPanel.setLayout(new GridBagLayout());
 		trsPanel.setLayout(new GridBagLayout());
+		trsPanelVi.setLayout(new GridBagLayout());
+		trsPanelEn.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(2, 2, 2, 2);
 
-		sntce.setBorder(loweredbevel);
 		sntce.setLineWrap(true);
 		sntce.setWrapStyleWord(true);
-		trs.setBorder(loweredbevel);
 		trs.setEditable(false);
 		trs.setLineWrap(true);
 		trs.setWrapStyleWord(true);
+
+		stsButtonEn.addActionListener(e -> {
+			try {
+		    	if(!sntce.getText().isEmpty()) {
+		    		cmd.speak(sntce.getText(), "en-US");
+				}
+			} catch(Exception ev) {
+		    	ev.printStackTrace();
+			}
+		});
+
+		stsButtonVi.addActionListener(e -> {
+			try {
+		    	if(!trs.getText().isEmpty()) {
+		    		cmd.speak(trs.getText(), "vi");
+				}
+			} catch(Exception ev) {
+		    	ev.printStackTrace();
+			}
+		});
+
+		addBorder(trs);
+		addBorder(sntce);
 
 		GBCfill(c, 0, 0, 1, 1);
 		strPanel.add(trsPanel, c);
 
 		GBCfill(c, 0, 0, 1, 0);
-		trsPanel.add(trsButton, c);
+		trsPanel.add(trsPanelEn, c);
 
 		GBCfill(c, 0, 1, 1, 1);
 		trsPanel.add(sntce, c);
 
+		GBCfill(c, 0, 0, 1, 1);
+		trsPanelEn.add(trsButton, c);
+		makeFlat(trsButton);
+
+		GBCfill(c, 1, 0, 0, 1);
+		trsPanelEn.add(stsButtonEn, c);
+		makeFlat(stsButtonEn);
+		setAudioButton(stsButtonEn);
+
 		GBCfill(c, 1, 0, 1, 1);
-		strPanel.add(trs, c);
+		strPanel.add(trsPanelVi, c);
+
+		GBCfill(c, 0, 0, 0, 0);
+		trsPanelVi.add(stsButtonVi, c);
+		makeFlat(stsButtonVi);
+		setAudioButton(stsButtonVi);
+
+		GBCfill(c, 0, 1, 1, 1);
+		trsPanelVi.add(trs, c);
+	}
+
+	/**
+	 * Add audio icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setAudioButton(JButton b) {
+		ImageIcon icon = new ImageIcon("./icon/audio.png");
+		Image img = icon.getImage();
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
+	/**
+	 * Add edit icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setEditButton(JButton b) {
+		ImageIcon icon = new ImageIcon("./icon/edit.png");
+		Image img = icon.getImage();
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	}
+
+	/**
+	 * Add delete icon to the button
+	 * @param b The button whose icon needs to be added
+	 */
+	public void setDelButton(JButton b) {
+		ImageIcon icon = new ImageIcon("./icon/delete.png");
+		Image img = icon.getImage();
+		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 	}
 
 	public void addEditFrame() {
-		ImageIcon icon = new ImageIcon("./icon/edit.png");
-		Image img = icon.getImage();
-		edtButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		setEditButton(edtButton);
 
 		edtFrame.setSize(300, 300);
 		edtFrame.setLocationRelativeTo(null);
@@ -368,8 +449,7 @@ public class DictionaryApplication {
 		JTextField pronField = new JTextField();
 		JTextArea explField = new JTextArea();
 
-		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-		explField.setBorder(loweredbevel);
+		addBorder(explField);
 		explField.setLineWrap(true);
 		explField.setWrapStyleWord(true);
 
@@ -430,14 +510,14 @@ public class DictionaryApplication {
 		});
 	}
 
-	public void setTtsButton() { //need to be updated from goku's code
-		ImageIcon icon = new ImageIcon("./icon/audio.png");
-		Image img = icon.getImage();
-		ttsButton.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+	public void setTtsButton() {
+		setAudioButton(ttsButton);
 		ttsButton.addActionListener(e -> {
 		    try {
 		    	if (sgn.getSelectedValue() != null) {
-		    		cmd.speak(sgn.getSelectedValue(), "en");
+		    		cmd.speak(sgn.getSelectedValue(), "en-US");
+				} else {
+					JOptionPane.showMessageDialog(delFrame, "You must select a word in the scroll panel");
 				}
 			} catch (Exception ev) {
 		    	ev.printStackTrace();
@@ -451,9 +531,12 @@ public class DictionaryApplication {
 	public void runApplication() {
 		addAddFrame();
 		addDelFrame();
-		addEditFrame();
-		setTtsButton(); // need to be updated from goku's code
 		addStrDialog();
+		addEditFrame();
+
+		setEditButton(edtButton);
+		setAudioButton(ttsButton);
+		setTtsButton();
 
 		ImageIcon icon = new ImageIcon("./icon/find.png");
 		Image img = icon.getImage();
@@ -463,13 +546,9 @@ public class DictionaryApplication {
 		def.setLineWrap(true);
 		def.setWrapStyleWord(true);
 		GridBagConstraints c = new GridBagConstraints();
-		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 
 		sgn_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		def_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		//schwd.setBorder(loweredbevel);
-		sgn.setBorder(loweredbevel);
-		def.setBorder(loweredbevel);
 		def.setEditable(false);
 
 		addAction();
@@ -481,6 +560,12 @@ public class DictionaryApplication {
 		dfcPanel.add(ttsButton);
 		dfcPanel.add(edtButton);
 		dfcPanel.add(delButton);
+
+		makeFlat(ttsButton);
+		makeFlat(edtButton);
+		makeFlat(delButton);
+		makeFlat(strButton);
+		makeFlat(addButton);
 
 		defPanel.setLayout(new GridBagLayout());
 		schPanel.setLayout(new GridBagLayout());
