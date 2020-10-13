@@ -1,11 +1,9 @@
 .idea
+.gradle
 /out
-*.dict
 *.class
 *.html
 *.xml
 *.iml
-*.txt
 *.bat
 *.jar
-.gradle

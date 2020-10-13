@@ -7,7 +7,7 @@ public class DictionaryManagement {
     private Dictionary dict = new Dictionary();
 
     public void insertFromCommandline() {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in, "UTF-8");
         int n = sc.nextInt();
 
         for (int i = 0; i < n; ++i) {

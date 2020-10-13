@@ -28,7 +28,7 @@ public class DictionaryManagement {
     public void insertFromFile() {
         try {
             File input = new File("../data/dictionaries.txt");
-            Scanner sc = new Scanner(input);
+            Scanner sc = new Scanner(input, "UTF-8");
 
             while (sc.hasNext()) {
                 String target = sc.next();
