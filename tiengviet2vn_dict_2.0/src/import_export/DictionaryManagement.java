@@ -32,8 +32,8 @@ public class DictionaryManagement {
             Scanner sc = new Scanner(input, "UTF-8");
 
             while (sc.hasNext()) {
-                String target = sc.next();
-                String explain = sc.next();
+                String target = sc.nextLine();
+                String explain = sc.nextLine();
                 Word word = new Word(target, explain);
                 dict.addWord(word);
             }
