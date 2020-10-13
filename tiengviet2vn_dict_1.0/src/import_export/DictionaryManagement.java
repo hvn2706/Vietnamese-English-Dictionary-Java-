@@ -43,7 +43,7 @@ public class DictionaryManagement {
     }
 
     public void dictionaryLookup() {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in, "UTF-8"););
 
         while (true) {
             System.out.print("\tSearch: ");

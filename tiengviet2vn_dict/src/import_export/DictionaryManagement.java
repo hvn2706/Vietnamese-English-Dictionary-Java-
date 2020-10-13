@@ -7,6 +7,7 @@ public class DictionaryManagement {
     private Dictionary dict = new Dictionary();
 
     public void insertFromCommandline() {
+        System.out.print("Input: ");
         Scanner sc = new Scanner(System.in, "UTF-8");
         int n = sc.nextInt();
 
