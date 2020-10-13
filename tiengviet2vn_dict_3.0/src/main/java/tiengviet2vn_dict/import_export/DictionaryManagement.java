@@ -16,6 +16,25 @@ public class DictionaryManagement {
         return dict;
     }
 
+    /**
+     * global tool to fix bugs.
+     * @param s input string
+     * @return s that been deleted all "\n" characters at the end
+     */
+    public static String packString(String s) {
+        for (int i = s.length() - 1; i >= 0; --i) {
+            if (s.charAt(i) == '\n') {
+                s = s.substring(0, s.length() - 1);
+            } else {
+                break;
+            }
+        }
+        return s;
+    }
+
+    /**
+     * read the whole data.
+     */
     public void insertFromFile() {
         try {
             File sr = new File("./data/AnhViet.dict");
@@ -84,6 +103,11 @@ public class DictionaryManagement {
         }
     }
 
+    /**
+     * add word to data file.
+     * @param target new word
+     * @param explain new word's explaination
+     */
     public void addToFile(String target, String explain) {
         inputContent.add("");
         String fullWord = "@" + target + " " + explain;
@@ -114,6 +138,12 @@ public class DictionaryManagement {
         }
     }
 
+    /**
+     * Actually this method don't delete the word from data file.
+     * it just ignoring the word in the file.
+     * @param target word need to be deleted
+     * @param explain to find the correct word
+     */
     public void deleteFromFile(String target, String explain) {
         try {
             BufferedWriter ignore = new BufferedWriter(
@@ -122,6 +152,8 @@ public class DictionaryManagement {
 
             String tmp_target = "";
             String tmp_explain = "";
+            String cmp1;
+            String cmp2;
 
             int index = 0;
             int start = 1;
@@ -130,7 +162,11 @@ public class DictionaryManagement {
                 if (s.equals("")) {
                     continue;
                 } else if (s.charAt(0) == '@') {
-                    if (tmp_target.equals(target) && tmp_explain.equals(explain)) {
+                    cmp1 = target + explain;
+                    cmp2 = tmp_target + tmp_explain;
+                    cmp1 = packString(cmp1);
+                    cmp2 = packString(cmp2);
+                    if (cmp1.equals(cmp2)) {
                         ignore.append(Integer.toString(start)).append("\n");
                     }
                     start = index;
@@ -145,16 +181,12 @@ public class DictionaryManagement {
                     tmp_explain += s + "\n";
                 }
             }
-            if (tmp_target.equals(target) && tmp_explain.equals(explain)) {
+            cmp1 = target + explain;
+            cmp2 = tmp_target + tmp_explain;
+            cmp1 = packString(cmp1);
+            cmp2 = packString(cmp2);
+            if (cmp1.equals(cmp2)) {
                 ignore.append(Integer.toString(start)).append("\n");
-            }
-            if (tmp_target.equals(target)) {
-                System.out.print("this" + tmp_explain);
-                System.out.print(explain + "hello");
-                /*System.out.println(inputContent.get(inputContent.size() - 4));
-                System.out.println(inputContent.get(inputContent.size() - 3));
-                System.out.println(inputContent.get(inputContent.size() - 2));
-                System.out.println(inputContent.get(inputContent.size() - 1));*/
             }
 
             dict.removeWord(target, explain);
@@ -165,16 +197,16 @@ public class DictionaryManagement {
         }
     }
 
+    /**
+     * update edit word into files
+     * @param target word need to be edited
+     * @param explain old explaination
+     * @param editExplain new explaination
+     */
     public void editFromFile(String target, String explain, String editExplain) {
-        for (int i = editExplain.length() - 1; i >= 0; --i) {
-            if (editExplain.charAt(i) == '\n') {
-                editExplain = editExplain.substring(0, editExplain.length() - 1);
-            } else {
-                break;
-            }
-        }
-        editExplain+="\n";
-        deleteFromFile(target, explain);
+        packString(editExplain);
+        editExplain += "\n";
         addToFile(target, editExplain);
+        deleteFromFile(target, explain);
     }
 }
