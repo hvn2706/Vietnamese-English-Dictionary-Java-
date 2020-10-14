@@ -34,6 +34,11 @@ public class DictionaryCommandline {
 
     public void dictionaryBasic() {
         DictionaryManagement mn = new DictionaryManagement();
+        System.out.println("tiengviet2vn_dict_0.0");
+        System.out.println("Input format: [ID number] [Word in English] [Word in Vietnamese]");
+        System.out.println("If input is not in correct format, the application is going to crashed!");
+        System.out.println("Press Ctrl+C twice to exit.");
+        System.out.println("----------------------------");
         mn.insertFromCommandline();
         this.showAllWords(mn.getDict());
     }

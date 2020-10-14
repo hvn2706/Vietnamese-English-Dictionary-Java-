@@ -47,6 +47,9 @@ public class DictionaryCommandline {
     }
 
     public void dictionaryAdvance() {
+        System.out.println("tiengviet2vn_dict_2.0");
+        System.out.println("Press Ctrl+C twice to exit.");
+        System.out.println("----------------------------");
         DictionaryManagement mn = new DictionaryManagement();
         mn.insertFromFile();
         mn.dictionaryExportToFile();
