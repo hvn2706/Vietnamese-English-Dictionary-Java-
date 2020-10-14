@@ -1,13 +1,13 @@
 # tiengviet2vn_dict
 ## Table of contents 📘
 - [tiengviet2vn_dict](#tiengviet2vn_dict)
-	- [Description](#description)
-	- [Prerequisite](#prerequisite)
-	- [Data](#data)
-	- [How to compile and run](#how-to-compile-and-run)
-	- [Screenshot](#screenshot)
-	- [Side nodes](#side-notes)
-	- [Meta](#meta)
+	- [Description](#description-)
+	- [Prerequisite](#prerequisite-)
+	- [Data](#data-)
+	- [How to compile and run](#how-to-compile-and-run-)
+	- [Screenshot](#screenshot-)
+	- [Side nodes](#side-notes-)
+	- [Meta](#meta-)
 
 ## Description 📜
 This is a small project made for *INT2204*.
