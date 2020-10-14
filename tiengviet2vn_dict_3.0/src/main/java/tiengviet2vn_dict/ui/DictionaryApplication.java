@@ -114,8 +114,13 @@ public class DictionaryApplication {
 			}
 		});
 
-		trsButton.addActionListener(e ->
-				trs.setText(cmd.sentenceTranslator(sntce.getText())));
+		trsButton.addActionListener(e -> {
+			if(cmd.checkConnection()) {
+				trs.setText(cmd.sentenceTranslator(sntce.getText()));
+			} else {
+				JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+			}
+		});
 
 		strButton.addActionListener(e -> strDialog.setVisible(true));
 
@@ -342,7 +347,11 @@ public class DictionaryApplication {
 		stsButtonEn.addActionListener(e -> {
 			try {
 		    	if(!sntce.getText().isEmpty()) {
-		    		cmd.speak(sntce.getText(), "en-US");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(sntce.getText(), "en-US");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				}
 			} catch(Exception ev) {
 		    	ev.printStackTrace();
@@ -352,7 +361,11 @@ public class DictionaryApplication {
 		stsButtonVi.addActionListener(e -> {
 			try {
 		    	if(!trs.getText().isEmpty()) {
-		    		cmd.speak(trs.getText(), "vi");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(trs.getText(), "vi");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				}
 			} catch(Exception ev) {
 		    	ev.printStackTrace();
@@ -511,7 +524,11 @@ public class DictionaryApplication {
 		ttsButton.addActionListener(e -> {
 		    try {
 		    	if (sgn.getSelectedValue() != null) {
-		    		cmd.speak(sgn.getSelectedValue(), "en-US");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(sgn.getSelectedValue(), "en-US");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				} else {
 					JOptionPane.showMessageDialog(delFrame, "You must select a word in the scroll panel");
 				}
@@ -525,6 +542,8 @@ public class DictionaryApplication {
 	 * Run the App with User Interface.
 	 */
 	public void runApplication() {
+		cmd.checkConnection();
+
 		addAddFrame();
 		addDelFrame();
 		addStrDialog();

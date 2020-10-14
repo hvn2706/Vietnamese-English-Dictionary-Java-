@@ -1,6 +1,7 @@
 package tiengviet2vn_dict.import_export;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import javax.sound.sampled.*;
 
@@ -76,6 +77,20 @@ public class DictionaryCommandline {
     }
 
     /**
+     * Check for internet connection
+     */
+    public boolean checkConnection() {
+        try {
+            URL url = new URL("https://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * Translate the provided sentence into Vietnamese.
      * @param sentence The sentence to be translated
      * @return Translated sentence
@@ -91,12 +106,6 @@ public class DictionaryCommandline {
                 translate.detect(sentence).getLanguage()),
             Translate.TranslateOption.targetLanguage("vi")
         );
-        try {
-            speak(translation.getTranslatedText(), "vi");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return translation.getTranslatedText();
     }
 
