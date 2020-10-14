@@ -28,12 +28,12 @@ public class DictionaryManagement {
 
     public void insertFromFile() {
         try {
-            File input = new File("data/dictionaries.txt");
-            Scanner sc = new Scanner(input);
+            File input = new File("../data/dictionaries.txt");
+            Scanner sc = new Scanner(input, "UTF-8");
 
             while (sc.hasNext()) {
-                String target = sc.next();
-                String explain = sc.next();
+                String target = sc.nextLine();
+                String explain = sc.nextLine();
                 Word word = new Word(target, explain);
                 dict.addWord(word);
             }
@@ -45,7 +45,7 @@ public class DictionaryManagement {
 
     public void dictionaryExportToFile() {
         try {
-            FileWriter file = new FileWriter("data/output.txt");
+            FileWriter file = new FileWriter("../data/output.txt");
             file.write("No    | English            | Vietnamese\n");
 
             dict.sortDictionary();

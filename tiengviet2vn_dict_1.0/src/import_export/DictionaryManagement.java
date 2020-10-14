@@ -28,11 +28,11 @@ public class DictionaryManagement {
     public void insertFromFile() {
         try {
             File input = new File("../data/dictionaries.txt");
-            Scanner sc = new Scanner(input);
+            Scanner sc = new Scanner(input, "UTF-8");
 
             while (sc.hasNext()) {
-                String target = sc.next();
-                String explain = sc.next();
+                String target = sc.nextLine();
+                String explain = sc.nextLine();
                 Word word = new Word(target, explain);
                 dict.addWord(word);
             }
@@ -43,7 +43,7 @@ public class DictionaryManagement {
     }
 
     public void dictionaryLookup() {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in, "UTF-8");
 
         while (true) {
             System.out.print("\tSearch: ");
