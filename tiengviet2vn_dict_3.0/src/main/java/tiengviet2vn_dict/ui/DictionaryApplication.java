@@ -1,9 +1,11 @@
 package tiengviet2vn_dict.ui;
 
 import java.awt.event.*;
+import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
@@ -618,6 +620,11 @@ public class DictionaryApplication {
 		appPanel.add(wrdPanel, c);
 
 		appFrame.setSize(500, 500);
+		try {
+			appFrame.setIconImage(ImageIO.read(new File("./icon/icon.png")));
+		} catch (Exception ev) {
+			ev.printStackTrace();
+		}
 		appFrame.setLocationRelativeTo(null);
 		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		appFrame.add(appPanel);
