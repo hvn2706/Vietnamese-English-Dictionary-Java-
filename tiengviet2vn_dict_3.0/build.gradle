@@ -30,6 +30,14 @@ dependencies {
     testImplementation 'junit:junit:4.13'
 }
 
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    options {
+        links 'https://docs.oracle.com/javase/8/docs/api/'
+    }
+}
+
 application {
     // Define the main class for the application.
     mainClassName = 'tiengviet2vn_dict.Main'
