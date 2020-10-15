@@ -6,4 +6,5 @@
 *.xml
 *.iml
 *.jar
+*.MF
 gradlew.bat
