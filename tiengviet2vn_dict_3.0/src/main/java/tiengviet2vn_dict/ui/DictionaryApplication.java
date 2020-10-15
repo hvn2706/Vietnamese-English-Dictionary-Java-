@@ -2,7 +2,6 @@ package tiengviet2vn_dict.ui;
 
 import java.awt.event.*;
 import javax.swing.event.*;
-import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +9,9 @@ import tiengviet2vn_dict.import_export.DictionaryCommandline;
 import tiengviet2vn_dict.import_export.DictionaryManagement;
 import tiengviet2vn_dict.words_handler.Word;
 
+/**
+ * Create app gui and all feature in the app.
+ */
 public class DictionaryApplication {
 	private final DictionaryCommandline cmd;
 	private final DictionaryManagement mn;
@@ -48,7 +50,7 @@ public class DictionaryApplication {
 	JTextArea def = new JTextArea("Definition here");
 	JTextArea sntce = new JTextArea("Sentence here");
 	JTextArea trs = new JTextArea("Translated sentence here");
-	JList<String> sgn = new JList<String>();
+	JList<String> sgn = new JList<>();
 	JScrollPane sgn_scroll = new JScrollPane(sgn);
 	JScrollPane def_scroll = new JScrollPane(def);
 
@@ -95,18 +97,12 @@ public class DictionaryApplication {
 	 * Add action to components.
 	 */
 	public void addAction() {
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addFrame.setVisible(true);
-			}
-		});
+		addButton.addActionListener(e -> addFrame.setVisible(true));
 
-		delButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (sgn.getSelectedValue() == null) {
-					JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
-				} else delFrame.setVisible(true);
-			}
+		delButton.addActionListener(e -> {
+			if (sgn.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(appFrame, "You must select a word in the dictionary!");
+			} else delFrame.setVisible(true);
 		});
 
 		edtButton.addActionListener(e -> {
@@ -118,17 +114,15 @@ public class DictionaryApplication {
 			}
 		});
 
-		trsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		trsButton.addActionListener(e -> {
+			if(cmd.checkConnection()) {
 				trs.setText(cmd.sentenceTranslator(sntce.getText()));
+			} else {
+				JOptionPane.showMessageDialog(appFrame, "No internet connection!");
 			}
 		});
 
-		strButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				strDialog.setVisible(true);
-			}
-		});
+		strButton.addActionListener(e -> strDialog.setVisible(true));
 
 		schwd.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -158,13 +152,11 @@ public class DictionaryApplication {
 			}
 		});
 
-		sgn.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if(e.getValueIsAdjusting()) {
-					return;
-				}
-				def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
+		sgn.addListSelectionListener(e -> {
+			if(e.getValueIsAdjusting()) {
+				return;
 			}
+			def.setText(cmd.dictionarySearchExact(sgn.getSelectedValue(), mn.getDict()));
 		});
 	}
 
@@ -329,6 +321,9 @@ public class DictionaryApplication {
 		no.addActionListener(e -> delFrame.dispose());
 	}
 
+	/**
+	 * Sentence translator window.
+	 */
 	public void addStrDialog() {
 		strDialog.setSize(350, 200);
 		strDialog.setLocationRelativeTo(null);
@@ -352,7 +347,11 @@ public class DictionaryApplication {
 		stsButtonEn.addActionListener(e -> {
 			try {
 		    	if(!sntce.getText().isEmpty()) {
-		    		cmd.speak(sntce.getText(), "en-US");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(sntce.getText(), "en-US");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				}
 			} catch(Exception ev) {
 		    	ev.printStackTrace();
@@ -362,7 +361,11 @@ public class DictionaryApplication {
 		stsButtonVi.addActionListener(e -> {
 			try {
 		    	if(!trs.getText().isEmpty()) {
-		    		cmd.speak(trs.getText(), "vi");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(trs.getText(), "vi");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				}
 			} catch(Exception ev) {
 		    	ev.printStackTrace();
@@ -432,6 +435,9 @@ public class DictionaryApplication {
 		b.setIcon(new ImageIcon(img.getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
 	}
 
+	/**
+	 * Edit a specific word window.
+	 */
 	public void addEditFrame() {
 		setEditButton(edtButton);
 
@@ -510,12 +516,19 @@ public class DictionaryApplication {
 		});
 	}
 
+	/**
+	 * Text to speech feature.
+	 */
 	public void setTtsButton() {
 		setAudioButton(ttsButton);
 		ttsButton.addActionListener(e -> {
 		    try {
 		    	if (sgn.getSelectedValue() != null) {
-		    		cmd.speak(sgn.getSelectedValue(), "en-US");
+		    		if(cmd.checkConnection()) {
+			    		cmd.speak(sgn.getSelectedValue(), "en-US");
+					} else {
+						JOptionPane.showMessageDialog(appFrame, "No internet connection!");
+					}
 				} else {
 					JOptionPane.showMessageDialog(delFrame, "You must select a word in the scroll panel");
 				}
@@ -529,6 +542,8 @@ public class DictionaryApplication {
 	 * Run the App with User Interface.
 	 */
 	public void runApplication() {
+		cmd.checkConnection();
+
 		addAddFrame();
 		addDelFrame();
 		addStrDialog();
